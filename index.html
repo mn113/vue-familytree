@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>Tree</title>
+	<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+	<div id="app">
+		<h1>{{ title }}</h1>
+		<individual
+			v-for="indiv in individuals"
+			v-bind:data="indiv"
+			v-bind:key="indiv.id">
+		</individual>
+		<family
+			v-for="fam in families"
+			v-bind:data="fam"
+			v-bind:key="fam.id">
+		</family>
+	</div>
+	<script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"></script>
+	<script src="app.js"></script>
+</body>
+<html>

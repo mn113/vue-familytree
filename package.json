@@ -9,6 +9,7 @@
   "author": "M. Nicholson",
   "license": "MIT",
   "dependencies": {
-    "parse-gedcom": "^1.0.3"
+    "parse-gedcom": "^1.0.3",
+    "vue": "^2.5.16"
   }
 }

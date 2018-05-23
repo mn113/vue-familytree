@@ -1,0 +1,17 @@
+#app {
+	border: 1px solid teal;
+}
+
+figure {
+	border: 1px solid black;
+	width: 10em;
+	padding: 0.3em 0.6em;
+}
+
+.M {
+	background: lightblue;
+}
+
+.F {
+	background: lightpink;
+}
