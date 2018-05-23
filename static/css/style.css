@@ -19,3 +19,12 @@ figure {
 .unknown {
 	background: #ccc;
 }
+
+h1 input {
+	font: 1.6em bold serif;
+	border: 0;
+}
+h2, h2 input {
+	font: 1.2em bold serif;
+	border: 0;
+}

@@ -7,7 +7,8 @@
 </head>
 <body>
 	<div id="app">
-		<h1>{{ title }}</h1>
+		<h1><input v-model="title"></input></h1>
+		<h2>by <input v-model="author"></input></h2>
 		<individual
 			v-for="indiv in individuals"
 			v-bind:data="indiv"

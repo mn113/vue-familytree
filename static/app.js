@@ -35,6 +35,7 @@ var app = new Vue({
 	el: '#app',
 	data: {
 		title: "Default tree",
+		author: "Martin",
 		individuals: [
 			{
 				fname: 'John',
