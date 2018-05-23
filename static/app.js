@@ -2,15 +2,21 @@ Vue.component('individual', {
 	props: ['data'],
 	template: `<figure :id="data.id" :class="data.sex">
 		<span class="name">{{ data.fname }} {{ data.lname }}</span>
-		<p class="dates">
-			<!-- birth or bapt or chr -->
-			<span v-if="data.events.birth">{{ data.events.birth.date }} {{ data.events.birth.place }}</span>
-			<span v-else-if="data.events.baptism"></span>
-			<span v-else-if="data.events.christening"></span>
+		<p class="dates" v-if="data.events">
+			<!-- birth or bapt or chr TODO: v-for event in ['birth','bap','chr','death','bur','crem']-->
+			<p v-if="data.events.birth">b.
+				<span v-if="data.events.birth.date">{{ data.events.birth.date }}</span>
+				<span v-if="data.events.birth.place">{{ data.events.birth.place }}</span>
+			</p>
+			<span v-else-if="data.events.baptism">bap.</span>
+			<span v-else-if="data.events.christening">chr.</span>
 			<!-- death or bur or crem -->
-			<span v-if="data.events.death">{{ data.events.death.date }} {{ data.events.death.place }}</span>
-			<span v-else-if="data.events.burial"></span>
-			<span v-else-if="data.events.cremation"></span>
+			<p v-if="data.events.death">d.
+				<span v-if="data.events.death.date">{{ data.events.death.date }}</span>
+				<span v-if="data.events.death.place">{{ data.events.death.place }}</span>
+			</p>
+			<span v-else-if="data.events.burial">bur.</span>
+			<span v-else-if="data.events.cremation">crem.</span>
 		</p>
 	</figure>`
 });
@@ -29,11 +35,6 @@ var app = new Vue({
 	el: '#app',
 	data: {
 		title: "Default tree",
-		groceryList: [
-			{ id: 0, text: 'Vegetables', fname: 'Fred' },
-			{ id: 1, text: 'Cheese' },
-			{ id: 2, text: 'Whatever else humans are supposed to eat' }
-		],
 		individuals: [
 			{
 				fname: 'John',
@@ -70,5 +71,18 @@ var app = new Vue({
 				id: '@F1@'
 			}
 		]
+	},
+	mounted() {
+		axios
+		.get('/treedata')
+		.then(response => {
+			this.individuals = response.data.people;
+			this.families = response.data.families;
+		})
+		.catch(error => {
+			console.log(error);
+			this.errored = true;
+		})
+		.finally(() => this.loading = false);
 	}
 })

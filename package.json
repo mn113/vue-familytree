@@ -9,6 +9,8 @@
   "author": "M. Nicholson",
   "license": "MIT",
   "dependencies": {
+    "dateformat": "^3.0.3",
+    "express": "^4.16.3",
     "parse-gedcom": "^1.0.3",
     "vue": "^2.5.16"
   }

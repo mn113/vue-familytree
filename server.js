@@ -1,37 +1,43 @@
 const fs = require('fs');
 const parser = require('parse-gedcom');
-const http = require('http');
-
-var treeData = readGedcomFile('simple.ged');
-
-// Handle requests for index.html or treeData:
-const requestHandler = (request, response) => {
-	console.log(request.url);
-	if (request.url == "/") {
-		response.end(fs.readFile('index.html', (err, html) => html));
-	}
-	else if (request.url == "/treedata") {
-		response.end(treeData);
-	}
-	else {
-		response.end('404');
-	}
-}
-
-// Start serving:
+const dateformat = require('dateformat');
+const express = require('express');
+const app = express();
 const port = 3000;
-http.createServer(requestHandler).listen(port, (err) => {
+var treeData;
+
+readGedcomFile('simple.ged');
+
+// Serve basic files:
+app.use(express.static('static'))
+
+app.post('/input', (req,res) => {
+	// TODO: Validate request & handle a submitted file
+});
+
+app.get('/treedata', (req,res) => {
+	console.log(treeData);
+	res.send(treeData);
+});
+
+// Error handling:
+app.use((err, req, res, next) => {
+	console.log(err);
+	res.status(500).send('Something broke!');
+})
+
+app.listen(port, (err) => {
 	console.log(`server is listening on ${port}`);
-	if (err) console.log(err);
+	if (err) console.log('something bad happened', err);
 });
 
 
 function readGedcomFile(filename) {
-	return fs.readFile(filename, 'utf-8', (err, data) => {	// TODO: non-utf8 encodings?
+	fs.readFile(filename, 'utf-8', (err, data) => {	// TODO: non-utf8 encodings?
 		if (err) throw err;
 		//console.log(data);
 		const json = parser.parse(data);
-		return processTree(json);
+		treeData = processTree(json);
 	});
 }
 
@@ -60,14 +66,35 @@ function processTree(json) {
 	};
 }
 
+function extractValue(key, arr) {
+	return arr.length > 0 ? arr[0].tree.filter(node => node.tag == key)[0].data : null
+}
+
 function mapIndividual(arr) {
+	console.log(arr);
 	var sex = arr.filter(node => node.tag == 'SEX');
 	var fams = arr.filter(node => node.tag == 'FAMS');
 	var famc = arr.filter(node => node.tag == 'FAMC');
+	var birth = arr.filter(node => node.tag == 'BIRT');
+	var death = arr.filter(node => node.tag == 'DEAT');
 	return {
 		fname: arr.filter(node => node.tag == 'NAME')[0].data,
 		lname: arr.filter(node => node.tag == 'NAME')[0].data,
 		sex: sex.length > 0 ? sex[0].data : 'unknown',
+		events: {
+			birth: {
+				date: dateformat(Date.parse(extractValue('DATE', birth)), 'yyyy-mm-dd'),
+				place: extractValue('PLAC', birth)
+			},
+			bap: 'baptism',
+			chr: 'christening',
+			death: {
+				date: dateformat(Date.parse(extractValue('DATE', death)), 'yyyy-mm-dd'),
+				place: extractValue('PLAC', death)
+			},
+			bur: 'burial',
+			crem: 'cremation',
+		},
 		famsHeadOf: fams.length > 0 ? fams.map(obj => obj.data) : null,
 		famsChildOf: famc.length > 0 ? famc[0].data : null
 	};
