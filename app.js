@@ -1,6 +1,18 @@
 Vue.component('individual', {
 	props: ['data'],
-	template: `<figure :id="data.id" :class="data.sex">{{ data.fname }} {{ data.lname }}</figure>`
+	template: `<figure :id="data.id" :class="data.sex">
+		<span class="name">{{ data.fname }} {{ data.lname }}</span>
+		<p class="dates">
+			<!-- birth or bapt or chr -->
+			<span v-if="data.events.birth">{{ data.events.birth.date }} {{ data.events.birth.place }}</span>
+			<span v-else-if="data.events.baptism"></span>
+			<span v-else-if="data.events.christening"></span>
+			<!-- death or bur or crem -->
+			<span v-if="data.events.death">{{ data.events.death.date }} {{ data.events.death.place }}</span>
+			<span v-else-if="data.events.burial"></span>
+			<span v-else-if="data.events.cremation"></span>
+		</p>
+	</figure>`
 });
 
 Vue.component('family', {
