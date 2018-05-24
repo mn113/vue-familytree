@@ -1,6 +1,9 @@
 #app {
 	border: 1px solid teal;
 }
+#canvas {
+	border: 1px solid fuchsia;
+}
 
 figure {
 	border: 1px solid black;
@@ -27,4 +30,32 @@ h1 input {
 h2, h2 input {
 	font: 1.2em bold serif;
 	border: 0;
+}
+
+text {
+	font-weight: 300;
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serf;
+	font-size: 14px;
+}
+
+#dagre-svg {
+	border: 1px solid blue;
+}
+
+.node rect {
+	stroke: #333;
+	fill: #fff;
+	stroke-width: 1.5px;
+}
+
+.edgePath path.path {
+	stroke: #333;
+	fill: none;
+	stroke-width: 1.5px;
+}
+
+.arrowhead {
+	stroke: blue;
+	fill: blue;
+	stroke-width: 1.5px;
 }

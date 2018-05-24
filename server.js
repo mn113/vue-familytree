@@ -35,7 +35,7 @@ app.listen(port, (err) => {
 function readGedcomFile(filename) {
 	fs.readFile(filename, 'utf-8', (err, data) => {	// TODO: non-utf8 encodings?
 		if (err) throw err;
-		//console.log(data);
+		console.log(parser.d3ize(data));
 		const json = parser.parse(data);
 		treeData = processTree(json);
 	});
