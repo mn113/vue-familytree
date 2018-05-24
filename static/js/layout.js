@@ -20,16 +20,6 @@ function addNodes() {
 	for (var node of app.families) {
 		g.setNode(node.id, { label: node.id, width: 80, height: 50, shape: "ellipse", style: "fill: lightyellow; stroke: #333" });
 	}
-/*
-	g.setNode("kspacey",    { label: "Kevin Spacey",  width: 144, height: 80, style: "fill: lightblue" });
-	g.setNode("swilliams",  { label: "Serena Williams", width: 160, height: 80, style: "fill: lightpink" });
-	g.setNode("fam1",       { label: "unmarried",     width: 120, height: 60, style: "fill: lightyellow", shape: "ellipse" });
-	g.setNode("bpitt",      { label: "Brad Pitt",     width: 108, height: 80 });
-	g.setNode("hford",      { label: "Harrison Ford", width: 168, height: 80 });
-	g.setNode("lwilson",    { label: "Luke Wilson",   width: 144, height: 80 });
-	g.setNode("fam2",       { label: "unmarried",     width: 120, height: 60, style: "fill: lightyellow", shape: "ellipse" });
-	g.setNode("kbacon",     { label: "Kevin Bacon",   width: 121, height: 80 });
-*/
 	/*
 	g.nodes().forEach(function(v) {
 	     console.log("Node " + v + ": " + JSON.stringify(g.node(v)));
@@ -39,18 +29,8 @@ function addNodes() {
 
 function addEdges() {
 	for (var link of app.links) {
-		g.setEdge(link.source, link.target);
+		g.setEdge(link.source, link.target, { curve: d3.curveBasis });
 	}
-/*
-	// Add edges to the graph.
-	g.setEdge("kspacey", "fam1");
-	g.setEdge("swilliams", "fam1");
-	g.setEdge("fam1", "bpitt", {curve: d3.curveBasis});
-	g.setEdge("fam1", "hford");
-	g.setEdge("fam1", "lwilson");
-	g.setEdge("lwilson", "fam2");
-	g.setEdge("fam2", "kbacon");
-*/
 	/*
 	g.edges().forEach(function(e) {
 	    console.log("Edge " + e.v + " -> " + e.w + ": " + JSON.stringify(g.edge(e)));

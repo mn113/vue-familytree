@@ -6,7 +6,7 @@ const app = express();
 const port = 3000;
 var treeData = {};
 
-readGedcomFile('simple.ged');
+readGedcomFile('allged.ged');
 
 // Serve basic files:
 app.use(express.static('static'))
@@ -35,6 +35,7 @@ function readGedcomFile(filename) {
 	fs.readFile(filename, 'utf-8', (err, data) => {	// TODO: non-utf8 encodings?
 		if (err) throw err;
 		const json = parser.parse(data);
+		console.log(json);
 		const linkedJson = (parser.d3ize(json));
 		treeData.nodes = processNodes(linkedJson);
 		treeData.links = processLinks(linkedJson);
@@ -66,8 +67,12 @@ function processNodes(json) {
 
 // Make sure all graph links are directed from high to low:
 function processLinks(json) {
+	console.log(json.links);
 	var cleanLinks = [];
 	for (var link of json.links) {
+		// Skip errors:
+		if (link.source === undefined || link.target === undefined) continue;
+
 		var from = treeData.nodes[link.source],
 			to = treeData.nodes[link.target];
 		if (from.type == "INDI") {
@@ -104,7 +109,13 @@ function processLinks(json) {
 
 // Helper function to get deep data:
 function extractValue(key, arr) {
-	return arr.length > 0 ? arr[0].tree.filter(node => node.tag == key)[0].data : null
+	try {
+		return arr.length > 0 ? arr[0].tree.filter(node => node.tag == key)[0].data : null
+	}
+	catch (err) {
+		console.log(err);
+		return null;
+	}
 }
 
 // Map an individual's data structure to something easier for front-end:
@@ -144,9 +155,9 @@ function mapFamily(arr) {
 	var children = arr.filter(node => node.tag == 'CHIL');
 	return {
 		//id: arr.filter(node => node.tag == 'POINTER')[0].data,
-		husband: arr.filter(node => node.tag == 'HUSB')[0].data,
-		wife: arr.filter(node => node.tag == 'WIFE')[0].data,
-		married: arr.filter(node => node.tag == 'MARR')[0].data,
+		husband: extractValue('HUSB', arr),
+		wife: extractValue('WIFE', arr),
+		married: extractValue('MARR', arr),
 		children: children.length > 0 ? children.map(obj => obj.data) : null
 	};
 }
