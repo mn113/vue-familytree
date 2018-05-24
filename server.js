@@ -35,35 +35,31 @@ app.listen(port, (err) => {
 function readGedcomFile(filename) {
 	fs.readFile(filename, 'utf-8', (err, data) => {	// TODO: non-utf8 encodings?
 		if (err) throw err;
-		console.log(parser.d3ize(data));
 		const json = parser.parse(data);
-		treeData = processTree(json);
+		const linkedJson = (parser.d3ize(json));
+		treeData = processTree(linkedJson);
 	});
 }
 
-function processTree(json) {
-	var people = [],
-		families = [];
-	for (var node of json) {
+function processTree(linkedJson) {
+	var cleanNodes = [];
+	for (var i = 0; i < linkedJson.nodes.length; i++) {
+		var node = linkedJson.nodes[i];
 		if (node.tag == 'INDI') {
-			//console.log(node.tag, ' ', node.pointer);
 			if (node.data) console.log(node.data);
 			var indiv = mapIndividual(node.tree);
-			indiv.id = node.pointer;
-			people.push(indiv);
+			indiv.id = i;
+			cleanNodes.push(indiv);
 		}
 		else if (node.tag == 'FAM') {
-			//console.log(node.tag, ' ', node.pointer);
 			if (node.data) console.log(node.data);
 			var family = mapFamily(node.tree);
-			family.id = node.pointer;
-			families.push(family);
+			family.id = i;
+			cleanNodes.push(family);
 		}
 	}
-	return {
-		people: people,
-		families: families
-	};
+	linkedJson.nodes = cleanNodes;
+	return linkedJson;
 }
 
 function extractValue(key, arr) {

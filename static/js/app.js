@@ -45,8 +45,9 @@ var app = new Vue({
 		axios
 		.get('/treedata')
 		.then(response => {
-			this.individuals = response.data.people;
-			this.families = response.data.families;
+			console.log(response);
+			this.individuals = response.data.nodes.filter(n => n.fname !== undefined);
+			this.families = response.data.nodes.filter(n => n.fname === undefined);
 		})
 		.catch(error => {
 			console.log(error);
