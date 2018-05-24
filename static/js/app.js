@@ -39,7 +39,8 @@ var app = new Vue({
 		title: "Default tree",
 		author: "Martin",
 		individuals: [],
-		families: []
+		families: [],
+		links: []
 	},
 	mounted() {
 		axios
@@ -48,6 +49,11 @@ var app = new Vue({
 			console.log(response);
 			this.individuals = response.data.nodes.filter(n => n.fname !== undefined);
 			this.families = response.data.nodes.filter(n => n.fname === undefined);
+			this.links = response.data.links;
+			// Now we can graph:
+			addNodes();
+			addEdges();
+			layoutAndRender();
 		})
 		.catch(error => {
 			console.log(error);
