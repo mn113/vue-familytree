@@ -14,17 +14,23 @@ var svg = d3.select("svg"),
 function addNodes() {
 	// Add nodes to the graph.
 	for (var node of app.individuals) {
-		var fill = node.sex == "M" ? "lightblue" : node.sex == "F" ? "lightpink" : "#ccc";
-		g.setNode(node.id, { label: node.fname, width: 100, height: 50, style: `fill: ${fill}` });
+		g.setNode(node.id, {
+			labelType: "html",
+			label: `${node.fname} <b>${node.lname}</b>`,
+			//label: `<individual v-bind:data="${node}" v-bind:key="${node.id}"></individual>`,
+			width: 100,
+			height: 50,
+			style: `fill: ${node.sex == "M" ? "lightblue" : node.sex == "F" ? "lightpink" : "#ccc"}`
+		});
 	}
 	for (var node of app.families) {
 		g.setNode(node.id, { label: node.id, width: 80, height: 50, shape: "ellipse", style: "fill: lightyellow; stroke: #333" });
 	}
-	/*
+
 	g.nodes().forEach(function(v) {
 	     console.log("Node " + v + ": " + JSON.stringify(g.node(v)));
 	});
-	*/
+	
 }
 
 function addEdges() {

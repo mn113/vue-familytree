@@ -6,7 +6,7 @@ const app = express();
 const port = 3000;
 var treeData = {};
 
-readGedcomFile('allged.ged');
+readGedcomFile('gedcom/allged.ged');
 
 // Serve basic files:
 app.use(express.static('static'))
@@ -120,15 +120,22 @@ function extractValue(key, arr) {
 
 // Map an individual's data structure to something easier for front-end:
 function mapIndividual(arr) {
-	console.log(arr);
+	var name = arr.filter(node => node.tag == 'NAME').shift().data;
+	var lname = name.match(/\/([\w\s\-\.]+)\//);			// double-slashed surname if present
+	var fname = name.match(/^([\w\s\-\.]+)(\/[\w\s\-\.]+\/)/);	// all text before the double-slashed surname
+	console.log(name, fname, lname);
 	var sex = arr.filter(node => node.tag == 'SEX');
 	var fams = arr.filter(node => node.tag == 'FAMS');
 	var famc = arr.filter(node => node.tag == 'FAMC');
 	var birth = arr.filter(node => node.tag == 'BIRT');
 	var death = arr.filter(node => node.tag == 'DEAT');
+	var events = {};
+	for (key in ['birth','bap','chr','death','bur','crem']) {
+		// extract births etc present in JSON TODO
+	}
 	return {
-		fname: arr.filter(node => node.tag == 'NAME')[0].data,
-		lname: arr.filter(node => node.tag == 'NAME')[0].data,
+		lname: lname !== undefined ? lname[1] : "",
+		fname: fname !== undefined ? fname[1] : "",
 		sex: sex.length > 0 ? sex[0].data : 'unknown',
 		events: {
 			birth: {

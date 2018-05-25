@@ -1,24 +1,33 @@
 #app {
 	border: 1px solid teal;
-}
-#canvas {
-	border: 1px solid fuchsia;
+	position: relative;
 }
 
 figure {
-	border: 1px solid black;
-	width: 10em;
+	border: 1px solid #333;
 	padding: 0.3em 0.6em;
+	xposition: absolute;
+	float: left;
+	overflow: hidden;
 }
-
+.person {
+	border-width: 2px;
+	width: 8em;
+	height: 5em;
+}
+.family {
+	width: 6em;
+	height: 4em;
+	background: lightyellow;
+	border-radius: 50%;
+	text-align: center;
+}
 .M {
 	background: lightblue;
 }
-
 .F {
 	background: lightpink;
 }
-
 .unknown {
 	background: #ccc;
 }

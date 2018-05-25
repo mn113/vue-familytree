@@ -1,31 +1,51 @@
 Vue.component('individual', {
-	props: ['data'],
+	props: {
+		'data': Object
+	},
+	data: function() {
+		return {
+			editing: false
+		}
+	},
+	methods:{
+        toggleEdit: function(){
+            this.editing = !this.editing;
+        }
+    },
 	template: `
-	<figure :id="data.id" :class="data.sex">
-		<span class="name">{{ data.fname }} {{ data.lname }}</span>
-		<p class="dates" v-if="data.events">
-			<!-- birth or bapt or chr TODO: v-for event in ['birth','bap','chr','death','bur','crem']-->
-			<p v-if="data.events.birth">b.
-				<span v-if="data.events.birth.date">{{ data.events.birth.date }}</span>
-				<span v-if="data.events.birth.place">{{ data.events.birth.place }}</span>
-			</p>
-			<span v-else-if="data.events.baptism">bap.</span>
-			<span v-else-if="data.events.christening">chr.</span>
-			<!-- death or bur or crem -->
-			<p v-if="data.events.death">d.
-				<span v-if="data.events.death.date">{{ data.events.death.date }}</span>
-				<span v-if="data.events.death.place">{{ data.events.death.place }}</span>
-			</p>
-			<span v-else-if="data.events.burial">bur.</span>
-			<span v-else-if="data.events.cremation">crem.</span>
-		</p>
+	<figure :id="data.id" :class="data.sex" class="person">
+		<div v-show="editing">
+			<i v-on:click="toggleEdit">Close</i>
+			<label for="fname">First name(s)</label><input name="fname" :value="data.fname">
+			<label for="lname">Surname(s)</label><input name="lname" :value="data.lname">
+			<div class="dates">
+				<div v-for="event, key in data.events" class="dates">
+					<label for="data">Date</label><input :value="event.date">
+					<label for="place">Place</label><input :value="event.place">
+				</div>
+				<!-- TODO: add/remove buttons -->
+			</div>
+		</div>
+		<div v-show="!editing">
+			<i v-on:click="toggleEdit">Edit</i>
+			<span class="name">{{ data.fname }} <b>{{ data.lname }}</b></span>
+			<div v-for="event, key in data.events" class="dates">
+				<p>{{ key }}.
+					<span v-if="event.date">{{ event.date }}</span>
+					<span v-if="event.place">{{ event.place }}</span>
+				</p>
+			</div>
+		</div>
 	</figure>`
 });
 
 Vue.component('family', {
-	props: ['data'],
+	props: {
+		'data': Object,
+		'editMode': false
+	},
 	template: `
-	<figure :id="data.id">
+	<figure :id="data.id" class="family">
 		{{ data.husband }} + {{ data.wife }}<br>
 		{{ data.married }}<br>
 		<span v-if="data.children.length == 1">1 child</span>
@@ -47,8 +67,8 @@ var app = new Vue({
 		.get('/treedata')
 		.then(response => {
 			console.log(response);
-			this.individuals = response.data.nodes.filter(n => n.fname !== undefined);
-			this.families = response.data.nodes.filter(n => n.fname === undefined);
+			this.individuals = response.data.nodes.filter(n => n.type == "INDI");
+			this.families = response.data.nodes.filter(n => n.type == "FAM");
 			this.links = response.data.links;
 			// Now we can graph:
 			addNodes();
@@ -60,5 +80,13 @@ var app = new Vue({
 			this.errored = true;
 		})
 		.finally(() => this.loading = false);
+	},
+	methods: {
+		arrangeNodes() {
+
+		}
+	},
+	computed: {
+
 	}
 })

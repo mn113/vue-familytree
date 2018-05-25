@@ -12,18 +12,16 @@
 		<h2>by <input v-model="author"></input></h2>
 		<individual
 			v-for="indiv in individuals"
-			v-bind:data="indiv"
-			v-bind:key="indiv.id">
+			:data="indiv"
+			:key="indiv.id">
 		</individual>
 		<family
 			v-for="fam in families"
-			v-bind:data="fam"
-			v-bind:key="fam.id">
+			:data="fam"
+			:key="fam.id">
 		</family>
+		<svg id="dagre-svg" width="800" height="600"></svg>
 	</div>
-	<div id="canvas">
-	</div>
-	<svg id="dagre-svg" width="800" height="600"></svg>
 	<script src="https://d3js.org/d3.v4.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/dagre/0.8.2/dagre.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/dagre-d3/0.6.1/dagre-d3.min.js"></script>
