@@ -119,25 +119,40 @@ function extractValue(key, arr) {
 }
 
 // Map an individual's data structure to something easier for front-end:
+// Every single property will need to be extracted conditionally :(
 function mapIndividual(arr) {
 	var name = arr.filter(node => node.tag == 'NAME').shift().data;
 	var lname = name.match(/\/([\w\s\-\.]+)\//);			// double-slashed surname if present
 	var fname = name.match(/^([\w\s\-\.]+)(\/[\w\s\-\.]+\/)/);	// all text before the double-slashed surname
 	console.log(name, fname, lname);
-	var sex = arr.filter(node => node.tag == 'SEX');
+	var sexes = arr.filter(node => node.tag == 'SEX');
 	var fams = arr.filter(node => node.tag == 'FAMS');
 	var famc = arr.filter(node => node.tag == 'FAMC');
-	var birth = arr.filter(node => node.tag == 'BIRT');
-	var death = arr.filter(node => node.tag == 'DEAT');
-	var events = {};
-	for (key in ['birth','bap','chr','death','bur','crem']) {
-		// extract births etc present in JSON TODO
-	}
+	//var birth = arr.filter(node => node.tag == 'BIRT');
+	//var death = arr.filter(node => node.tag == 'DEAT');
+	// Extract all events of desired types:
+	var events = ['BIRT','BAPM','CHR','CHRA','DEAT','BURI','CREM']
+		.map(key => {
+			return {
+				type: key,
+				nodeList: arr.filter(node => node.tag == key)
+			};
+		})
+		.filter(obj => obj.nodeList.length > 0)
+		.map(obj => {
+			return {
+				type: obj.type,
+				date: dateformat(Date.parse(extractValue('DATE', obj.nodeList.shift())), 'yyyy-mm-dd'),
+				place: extractValue('PLAC', obj.nodeList.shift())
+			};
+		});
+
 	return {
-		lname: lname !== undefined ? lname[1] : "",
-		fname: fname !== undefined ? fname[1] : "",
-		sex: sex.length > 0 ? sex[0].data : 'unknown',
-		events: {
+		lname: lname !== undefined ? lname[1].trim() : "",
+		fname: fname !== undefined ? fname[1].trim() : "",
+		sex: sexes.length > 0 ? sexes[0].data : 'unknown',
+		events: events,
+/*		old: {
 			birth: {
 				date: dateformat(Date.parse(extractValue('DATE', birth)), 'yyyy-mm-dd'),
 				place: extractValue('PLAC', birth)
@@ -150,9 +165,10 @@ function mapIndividual(arr) {
 			},
 			bur: 'burial',
 			crem: 'cremation',
-		},
+		},*/
 		famsHeadOf: fams.length > 0 ? fams.map(obj => obj.data) : [],
-		famsChildOf: famc.length > 0 ? famc.map(obj => obj.data) : []
+		famsChildOf: famc.length > 0 ? famc.map(obj => obj.data) : [],
+		notes: []
 	};
 }
 

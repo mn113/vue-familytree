@@ -27,10 +27,10 @@ function addNodes() {
 		g.setNode(node.id, { label: node.id, width: 80, height: 50, shape: "ellipse", style: "fill: lightyellow; stroke: #333" });
 	}
 
-	g.nodes().forEach(function(v) {
-	     console.log("Node " + v + ": " + JSON.stringify(g.node(v)));
-	});
-	
+	// g.nodes().forEach(function(v) {
+	//      console.log("Node " + v + ": " + JSON.stringify(g.node(v)));
+	// });
+
 }
 
 function addEdges() {

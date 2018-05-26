@@ -2,22 +2,26 @@
 	border: 1px solid teal;
 	position: relative;
 }
-
 figure {
-	border: 1px solid #333;
-	padding: 0.3em 0.6em;
+	xborder: 1px solid #333;
+	xpadding: 0.3em 0.6em;
 	xposition: absolute;
-	float: left;
-	overflow: hidden;
+	xfloat: left;
+	xoverflow: hidden;
+}
+.editing {
+	background: #eee !important;
+	width: 18em;
+	height: 10em;
 }
 .person {
 	border-width: 2px;
-	width: 8em;
-	height: 5em;
+	width: 12em;
+	height: 7em;
 }
 .family {
-	width: 6em;
-	height: 4em;
+	width: 7em;
+	height: 5em;
 	background: lightyellow;
 	border-radius: 50%;
 	text-align: center;
@@ -41,30 +45,23 @@ h2, h2 input {
 	border: 0;
 }
 
+/* dagre-d3: */
+
 text {
 	font-weight: 300;
 	font-family: "Helvetica Neue", Helvetica, Arial, sans-serf;
 	font-size: 14px;
 }
-
 #dagre-svg {
 	border: 1px solid blue;
 }
-
 .node rect {
 	stroke: #333;
 	fill: #fff;
 	stroke-width: 1.5px;
 }
-
 .edgePath path.path {
 	stroke: #333;
 	fill: none;
-	stroke-width: 1.5px;
-}
-
-.arrowhead {
-	stroke: blue;
-	fill: blue;
 	stroke-width: 1.5px;
 }
