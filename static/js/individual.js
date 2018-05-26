@@ -8,7 +8,7 @@ Vue.component('individual', {
 			editing: false
 		}
 	},
-	methods:{
+	methods: {
         toggleEdit: function() {
             this.editing = !this.editing;
         },
@@ -23,6 +23,9 @@ Vue.component('individual', {
 			this.data.events.splice(i,1);
 		}
     },
+	computed: {
+		
+	},
 	template: `
 		<v-flex xs6>
 			<v-card>
@@ -54,8 +57,6 @@ Vue.component('individual', {
 									></v-text-field>
 								</v-flex>
 							</v-layout>
-							<!--label for="fname">First name(s)</label><input name="fname" v-model="data.fname">
-							<label for="lname">Surname(s)</label><input name="lname" v-model="data.lname"-->
 							<label for="sex">Sex</label>
 							<select v-model="data.sex" name="sex">
 								<option>M</option>

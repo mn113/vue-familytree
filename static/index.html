@@ -14,9 +14,16 @@
 	<div id="app">
 		<v-app>
 			<v-content>
-				<v-toolbar dense prominent extended>
+				<v-toolbar dense prominent extended dark>
 					<v-toolbar-side-icon></v-toolbar-side-icon>
 					<v-toolbar-title>Title</v-toolbar-title>
+					<v-spacer></v-spacer>
+					<v-form>
+						<label>Choose a GEDCOM file:
+							<input type="file" id="file" ref="file" v-on:change="storeFormFile()"/>
+						</label>
+						<v-btn v-on:click="submitForm()">Upload</v-btn>
+				    </v-form>
 					<v-spacer></v-spacer>
 					<v-btn icon>
 						<v-icon>search</v-icon>
@@ -60,6 +67,7 @@
     <script src="https://unpkg.com/vuetify/dist/vuetify.js"></script>
 	<script src="js/individual.js"></script>
 	<script src="js/family.js"></script>
+	<script src="js/event.js"></script>
 	<script src="js/vueapp.js"></script>
 	<script src="js/layout.js"></script>
 </body>

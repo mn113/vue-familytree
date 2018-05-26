@@ -3,7 +3,9 @@ const parser = require('parse-gedcom');
 const dateformat = require('dateformat');
 const express = require('express');
 const app = express();
-const port = 3000;
+const multer = require('multer');
+var upload = multer({ dest: 'uploads/' });
+var port = 3000;
 var treeData = {};
 
 readGedcomFile('gedcom/allged.ged');
@@ -11,10 +13,22 @@ readGedcomFile('gedcom/allged.ged');
 // Serve basic files:
 app.use(express.static('static'))
 
-app.post('/input', (req,res) => {
-	// TODO: Validate request & handle a submitted file
+// Receive uploaded GEDCOM file:
+app.post('/upload', upload.any(), (req,res) => {
+	//console.log('form data', req.body);
+	//console.log('file', req.file);
+	console.log('files', req.files[0]);
+	// Process and store data:
+	if (req.files !== undefined) {
+		readGedcomFile(req.files[0].path);
+		res.sendStatus(200);
+	}
+	else {
+		res.sendStatus(500);
+	}
 });
 
+// Serve current treeData object as JSON:
 app.get('/treedata', (req,res) => {
 	console.log(treeData);
 	res.send(treeData);
@@ -67,7 +81,7 @@ function processNodes(json) {
 
 // Make sure all graph links are directed from high to low:
 function processLinks(json) {
-	console.log(json.links);
+	//console.log(json.links);
 	var cleanLinks = [];
 	for (var link of json.links) {
 		// Skip errors:
@@ -76,30 +90,30 @@ function processLinks(json) {
 		var from = treeData.nodes[link.source],
 			to = treeData.nodes[link.target];
 		if (from.type == "INDI") {
-			console.log("person->family:", link);
-			console.log(to.id);
-			console.log(from.famsHeadOf);
+			//console.log("person->family:", link);
+			//console.log(to.id);
+			//console.log(from.famsHeadOf);
 			if (from.famsHeadOf.includes(to.id)) {
 				// reverse edge:
-				console.log("Reversed");
+				//console.log("Reversed");
 				cleanLinks.push({source: to.id, target: from.id});
 			}
 			else {
-				console.log("Link fine");
+				//console.log("Link fine");
 				cleanLinks.push({source: from.id, target: to.id});
 			}
 		}
 		else if (to.type == "INDI") {
-			console.log("family->person:", link);
-			console.log(from.id);
-			console.log(to.famsChildOf);
+			//console.log("family->person:", link);
+			//console.log(from.id);
+			//console.log(to.famsChildOf);
 			if (!to.famsChildOf.includes(from.id)) {
 				// reverse edge:
-				console.log("Reversed");
+				//console.log("Reversed");
 				cleanLinks.push({source: to.id, target: from.id});
 			}
 			else {
-				console.log("Link fine");
+				//console.log("Link fine");
 				cleanLinks.push({source: from.id, target: to.id});
 			}
 		}
@@ -128,8 +142,6 @@ function mapIndividual(arr) {
 	var sexes = arr.filter(node => node.tag == 'SEX');
 	var fams = arr.filter(node => node.tag == 'FAMS');
 	var famc = arr.filter(node => node.tag == 'FAMC');
-	//var birth = arr.filter(node => node.tag == 'BIRT');
-	//var death = arr.filter(node => node.tag == 'DEAT');
 	// Extract all events of desired types:
 	var events = ['BIRT','BAPM','CHR','CHRA','DEAT','BURI','CREM']
 		.map(key => {
@@ -142,7 +154,7 @@ function mapIndividual(arr) {
 		.map(obj => {
 			return {
 				type: obj.type,
-				date: dateformat(Date.parse(extractValue('DATE', obj.nodeList.shift())), 'yyyy-mm-dd'),
+				date: extractValue('DATE', obj.nodeList.shift()),
 				place: extractValue('PLAC', obj.nodeList.shift())
 			};
 		});
@@ -151,23 +163,9 @@ function mapIndividual(arr) {
 		lname: lname !== undefined ? lname[1].trim() : "",
 		fname: fname !== undefined ? fname[1].trim() : "",
 		sex: sexes.length > 0 ? sexes[0].data : 'unknown',
-		events: events,
-/*		old: {
-			birth: {
-				date: dateformat(Date.parse(extractValue('DATE', birth)), 'yyyy-mm-dd'),
-				place: extractValue('PLAC', birth)
-			},
-			bap: 'baptism',
-			chr: 'christening',
-			death: {
-				date: dateformat(Date.parse(extractValue('DATE', death)), 'yyyy-mm-dd'),
-				place: extractValue('PLAC', death)
-			},
-			bur: 'burial',
-			crem: 'cremation',
-		},*/
 		famsHeadOf: fams.length > 0 ? fams.map(obj => obj.data) : [],
 		famsChildOf: famc.length > 0 ? famc.map(obj => obj.data) : [],
+		events: events,
 		notes: []
 	};
 }
