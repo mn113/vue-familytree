@@ -11,13 +11,13 @@ figure {
 }
 .editing {
 	background: #eee !important;
-	width: 18em;
-	height: 10em;
+	xwidth: 18em;
+	xheight: 10em;
 }
 .person {
 	border-width: 2px;
-	width: 12em;
-	height: 7em;
+	xwidth: 12em;
+	xheight: 7em;
 }
 .family {
 	width: 7em;

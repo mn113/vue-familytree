@@ -15,7 +15,8 @@ var app = new Vue({
 		author: "Martin",
 		individuals: [],
 		families: [],
-		links: []
+		links: [],
+		editingNode: null
 	},
 	mounted() {
 		axios

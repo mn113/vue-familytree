@@ -9,12 +9,22 @@ Vue.component('individual', {
 		}
 	},
 	methods:{
-        toggleEdit: function(){
+        toggleEdit: function() {
             this.editing = !this.editing;
-        }
+        },
+		addEvent: function() {
+			this.data.events.push({
+				type: "",
+				date: "",
+				place: ""
+			});
+		},
+		deleteEvent: function(i) {
+			this.data.events.splice(i,1);
+		}
     },
 	template: `
-		<v-flex xs2 sm6 offset-sm3>
+		<v-flex xs6>
 			<v-card>
 				<v-card-text>
 					<figure :id="data.id" :class="[data.sex, {editing: editing}]" class="person">
@@ -53,12 +63,13 @@ Vue.component('individual', {
 								<option>unknown</option>
 							</select>
 							<div class="dates">
-								<div v-for="event in data.events" class="dates">
+								<div v-for="event, i in data.events" class="dates">
 									<span>{{ event.type }}</span>
 									<label for="data">Date</label><input v-model="event.date">
 									<label for="place">Place</label><input v-model="event.place">
+									<v-btn v-on:click="deleteEvent(i)"><v-icon>delete</v-icon></v-btn>
 								</div>
-								<!-- TODO: add/remove event buttons -->
+								<v-btn v-on:click="addEvent"><v-icon>add</v-icon></v-btn>
 							</div>
 						</div>
 						<div v-show="!editing">
