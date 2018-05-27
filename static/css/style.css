@@ -65,3 +65,6 @@ text {
 	fill: none;
 	stroke-width: 1.5px;
 }
+foreignObject p {
+	text-align: center;
+}

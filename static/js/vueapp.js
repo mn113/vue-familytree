@@ -1,13 +1,3 @@
-const gedcom2en = {
-	"BIRT": "birth",
-	"BAPM": "baptism",
-	"CHR": "christening",
-	"CHRA": "adult christening",
-	"DEAT": "death",
-	"BURI": "burial",
-	"CREM": "cremation"
-};
-
 var app = new Vue({
 	el: '#app',
 	data: {
