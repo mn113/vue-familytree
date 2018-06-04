@@ -10,6 +10,7 @@ const multer = require('multer');
 var upload = multer({ dest: 'uploads/' });
 var port = 3000;
 var treeData = {};
+var eventId = 0;
 
 readGedcomFile('gedcom/fictitious.ged');
 
@@ -162,6 +163,7 @@ function mapIndividual(arr) {
 	events = events.filter(obj => obj.nodeList.length > 0)
 	.map(obj => {
 			return {
+				id: eventId++,
 				type: obj.type,
 				date: Date.parse(extractValue('DATE', obj.nodeList)),	// to milliseconds
 				place: extractValue('PLAC', obj.nodeList)

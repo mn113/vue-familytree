@@ -11,8 +11,8 @@
 
 </head>
 <body>
-	<div id="app">
-		<v-app>
+	<div>
+		<v-app id="app">
 			<v-content>
 				<v-toolbar dense prominent extended dark>
 					<v-toolbar-side-icon></v-toolbar-side-icon>
@@ -35,13 +35,13 @@
 						<v-icon>more_vert</v-icon>
 					</v-btn>
 				</v-toolbar>
-				<v-container fluid grid-list-xl>
+				<v-container fluid>
 					<h1><input v-model="title"></input></h1>
 					<h2>by <input v-model="author"></input></h2>
-					<v-layout row justify-space-between>
+					<v-layout row justify-space-between grid-list-xl wrap="true">
 						<individual
 							v-for="indiv in individuals"
-							:data="indiv"
+							v-bind:data=indiv
 							:key="indiv.id">
 						</individual>
 						<family
@@ -57,25 +57,29 @@
 				<div>&copy; {{ new Date().getFullYear() }}</div>
 			</v-footer>
 		</v-app>
+		<div id="cy"></div>
 		<svg id="dagre-svg" width="800" height="600"></svg>
 	</div>
-	<script src="https://d3js.org/d3.v4.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/dagre/0.8.2/dagre.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/dagre-d3/0.6.1/dagre-d3.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/springy/2.8.0/springy.min.js"></script>
 	<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 	<script src="https://unpkg.com/vue/dist/vue.js"></script>
     <script src="https://unpkg.com/vuetify/dist/vuetify.js"></script>
+	<!--script src="https://d3js.org/d3.v4.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/dagre/0.8.2/dagre.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/dagre-d3/0.6.1/dagre-d3.min.js"></script-->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.2.12/cytoscape.min.js"></script>
+	<script src="https://unpkg.com/dagre@0.8.2/dist/dagre.js"></script>
+	<script src="js/3rdparty/cytoscape-dagre.js"></script>
 	<script src="js/individual.js"></script>
 	<script src="js/family.js"></script>
 	<script src="js/event.js"></script>
 	<script src="js/vueapp.js"></script>
-	<script src="js/layout.js"></script>
+	<!--script src="js/layout-dagre.js"></script-->
+	<script src="js/layout-cyto.js"></script>
 	<script>
 	const gedcom2en = {
 		"BIRT": "birth",
 		"BAPM": "baptism",
-		"CHR": "christening",
+		"CHR" : "christening",
 		"CHRA": "adult christening",
 		"DEAT": "death",
 		"BURI": "burial",

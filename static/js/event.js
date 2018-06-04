@@ -1,28 +1,49 @@
-Vue.component('eventField', {
+Vue.component('event', {
 	props: {
 		'event': Object,
 		'editing': Boolean	// from parent
 	},
 	methods: {
-		delete: function() {
-			// TODO: reference parent method
-		}
+		// Talk to parent:
+		deleteEvent: function() {
+			this.$emit('input', null);	// ?
+		},
+		updateEvent: function() {
+    		this.$emit('input', {
+				type: event.type,
+				date: this.$refs.date.value,
+				place: this.$refs.place.value
+			});
+    	}
 	},
 	computed: {
 		fulldate: function() {
-			return dateformat(event.date, 'yyyy-mm-dd');
+			return fulldate(event.date);
 		},
 		year: function() {
-			return dateformat(event.date, 'yyyy');
+			return year(event.date);
 		}
 	},
 	template: `
 	<div class="event">
 		<div v-show="editing">
 			<span>{{ event.type }}</span>
-			<label for="data">Date</label><input v-model="event.date">
-			<label for="place">Place</label><input v-model="event.place">
-			<v-btn v-on:click="deleteEvent(i)"><v-icon>delete</v-icon></v-btn>
+
+			<label for="date">Date</label>
+			<input
+				name="date"
+				ref="date"
+				v-model="event.date"
+				v-on:input="updateEvent()">
+
+			<label for="place">Place</label>
+			<input
+				name="place"
+				ref="place"
+				v-model="event.place"
+				v-on:input="updateEvent()">
+
+			<v-btn v-on:click="deleteEvent()"><v-icon>delete</v-icon></v-btn>
 		</div>
 		<div v-show="!editing">
 			<span>{{ event.type }}</span>
