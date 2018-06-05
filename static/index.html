@@ -13,6 +13,7 @@
 <body>
 	<div  id="app" class="layout-grid">
 		<header>
+			<h1>Family Tree Editor</h1>
 			<form>
 				<label>Choose a GEDCOM file:
 					<input type="file" id="file" ref="file" @change="storeFormFile()"/>
@@ -21,8 +22,8 @@
 		    </form>
 		</header>
 		<main>
-			<h1><input v-model="title"></input></h1>
-			<h2>by <input v-model="author"></input></h2>
+			<h2><input v-model="title"></input></h2>
+			<h3>by <input v-model="author"></input></h3>
 			<svg id="dagre-svg" width="100%" height="100%"></svg>
 		</main>
 		<aside>

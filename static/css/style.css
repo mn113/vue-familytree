@@ -23,6 +23,7 @@ main {
 aside {
 	grid-row: 2;
 	grid-column: 2;
+	position: fixed;
 	xborder: 1px solid blue;
 	padding-right: 1em;
 	background: #ccc;
@@ -70,16 +71,36 @@ footer {
 	background: #ccc;
 }
 
-h1 input {
-	font: 1.6em bold serif;
+
+/********/
+/* TEXT */
+/********/
+h1 {
+	font: 1.2em bold Roboto, sans-serif;
+	color: white;
+	display: inline-block;
+}
+h2 input {
+	font: 1.5em bold serif;
 	border: 0;
 }
-h2, h2 input {
+h3, h3 input {
 	font: 1.2em bold serif;
 	border: 0;
 }
+i {
+	font-family: "Material Icons";
+	font-style: normal;
+	cursor: pointer;
+}
+i:hover {
+	color: blue;
+}
 
-/* dagre-d3 */
+
+/************/
+/* DAGRE-D3 */
+/************/
 #dagre-svg {
 	border: 1px solid blue;
 }
@@ -101,19 +122,9 @@ h2, h2 input {
 	fill: none;
 	stroke-width: 1.5px;
 }
-foreignObject p {
+#dagre-svg .label p {
 	text-align: center;
-}
-text {
 	font-weight: 300;
 	font-family: "Helvetica Neue", Helvetica, Arial, sans-serf;
 	font-size: 14px;
-}
-
-/* Cytoscape.js */
-#cy {
-	width: 90vw;
-	height: 0px;
-	display: block;
-	border: 2px solid fuchsia;
 }

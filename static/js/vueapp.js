@@ -57,6 +57,7 @@ var app = new Vue({
 			})
 			.catch(err => console.log('Upload failed', err));
 		},
+
 		selectNodeById(id) {
 			var matched = this.nodes.filter(n => n.id == id);
 			console.log(matched);
@@ -64,9 +65,52 @@ var app = new Vue({
 		},
 		selectNone() {
 			this.selectedNode = null;
+		},
+
+		newIndividual() {
+			this.individuals.push(new Individual);
+			// re-render
+		},
+
+		newFamily() {
+			this.families.push(new Family);
+			// re-render
+		},
+
+		newLink(source, target) {
+
 		}
 	},
 	computed: {
 
 	}
 });
+
+var INDI_ID = 0;
+var FAM_ID = 0;
+
+class Individual {
+	construct() {
+		return {
+			id: INDI_ID++,
+			type: "INDI",
+			fname: "",
+			lname: "",
+			sex: "unknown",
+			events: []
+		}
+	}
+}
+
+class Family {
+	construct() {
+		return {
+			id: FAM_ID++,
+			type: "FAM",
+			husb: "",
+			wife: "",
+			married: "",
+			events: []
+		}
+	}
+}

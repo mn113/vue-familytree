@@ -36,14 +36,24 @@ Vue.component('individual', {
 				events: this.data.events
 			});
 		},
-    },
-/*	events: {
-		updateEvent: function(i, value) {
-
+		disconnectFrom(otherNode) {
+			// delete edge
+			// remove person's family
+			// remove family's person
+			// re-render
+		},
+		attachTo(otherNode) {
+			// add edge
+			// add person to family
+			// add family to person
+			// re-render
 		}
-	}*/
+    },
 	computed: {
-
+		events() {
+			// Sort chronologically:
+			return this.data.events.sort((a,b) => { b.date - a.date; });
+		}
 	},
 	template: `
 		<div :id="data.id" :class="[data.sex, {editing: editing}]" class="person">

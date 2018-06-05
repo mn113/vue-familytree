@@ -5,23 +5,23 @@ Vue.component('event', {
 	},
 	methods: {
 		// Talk to parent:
-		deleteEvent: function() {
-			this.$emit('input', null);	// ?
+		deleteEvent() {
+			this.$emit('input', null);	// FIXME better way to delete?
 		},
-		updateEvent: function() {
+		updateEvent() {
     		this.$emit('input', {
-				type: event.type,
+				type: this.event.type,
 				date: this.$refs.date.value,
 				place: this.$refs.place.value
 			});
     	}
 	},
 	computed: {
-		fulldate: function() {
-			return fulldate(event.date);
+		fulldate() {
+			return fulldate(this.event.date);
 		},
-		year: function() {
-			return year(event.date);
+		year() {
+			return year(this.event.date);
 		}
 	},
 	template: `
@@ -29,7 +29,7 @@ Vue.component('event', {
 		<div v-show="editing">
 			<select
 				ref="type"
-				v-model="data.type">
+				v-model="event.type">
 				<option>BIRT</option>
 				<option>DEAT</option>
 			</select>
@@ -38,7 +38,7 @@ Vue.component('event', {
 			<input
 				name="date"
 				ref="date"
-				v-model="event.date"
+				:value="fulldate"
 				@input="updateEvent()">
 
 			<label for="place">Place</label>
@@ -53,7 +53,7 @@ Vue.component('event', {
 		<div v-show="!editing">
 			<span>{{ event.type }}</span>
 			<span>{{ event.place }}</span>
-			<span>{{ this.year }}</span>
+			<span>{{ fulldate }}</span>
 		</div>
 	</div>`
 });
