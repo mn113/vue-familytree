@@ -1,20 +1,15 @@
 // Create a new directed graph
-var g = new dagreD3.graphlib.Graph();
-
+var graph = new dagreD3.graphlib.Graph();
 // Set an object for the graph label
-g.setGraph({});
-
-// Default to assigning a new object as a label for each new edge.
-//g.setDefaultEdgeLabel(function() { return {}; });
+graph.setGraph({});
 
 // Set up an SVG group so that we can translate the final graph.
 var svg = d3.select("svg"),
 	inner = svg.append("g");
 
-function addNodes() {
-	// Add nodes to the graph.
-	for (var node of app.individuals) {
-		g.setNode(node.id, {
+class Tree {
+	static addIndividualNode(node) {
+		graph.setNode(node.id, {
 			labelType: "html",
 			label: `<div id="${node.id}">
 						<p>${node.fname} <b>${node.lname}</b></p>
@@ -25,8 +20,9 @@ function addNodes() {
 			style: `fill: ${node.sex == "M" ? "lightblue" : node.sex == "F" ? "lightpink" : "#ccc"}`
 		});
 	}
-	for (var node of app.families) {
-		g.setNode(node.id, {
+
+	static addFamilyNode(node) {
+		graph.setNode(node.id, {
 			labelType: "html",
 			label: `<div id="${node.id}">
 						<p>${node.married}</p>
@@ -38,48 +34,74 @@ function addNodes() {
 			style: "fill: lightyellow; stroke: #333"
 		});
 	}
-}
 
-function addEdges() {
-	for (var link of app.links) {
-		g.setEdge(link.source, link.target, { curve: d3.curveBasis });
+	static addEdge(source, target) {
+		graph.setEdge(source, target, { curve: d3.curveBasis });
 	}
-}
 
-function layoutAndRender() {
-	// Calculate layout:
-	dagre.layout(g);
+	// Add all the Vue nodes data to the graph:
+	static addAllNodes() {
+		// Individuals:
+		for (var node of app.individuals) {
+			Tree.addIndividualNode(node);
+		}
+		// Families:
+		for (var node of app.families) {
+			Tree.addFamilyNode(node);
+		}
+	}
 
-	// Create the renderer
-	var render = new dagreD3.render();
+	// Add all the Vue edges data to the graph:
+	static addAllEdges() {
+		for (var link of app.links) {
+			Tree.addEdge(link.source, link.target);
+		}
+	}
 
-	// Run the renderer. This is what draws the final graph.
-	render(inner, g);
+	// Erase the graph: (preserves graph data)
+	static clearGraph() {
+		inner.html("");
+	}
 
-	// Add event listeners to nodes:
-	inner.selectAll("g.node").on("click", selectNode);
-	// Unselecting click:
-	svg.on("click", function() {
+	// Draw a new graph:
+	static layoutAndRender() {
+		// Calculate layout:
+		dagre.layout(graph);
+
+		// Create the renderer
+		var render = new dagreD3.render();
+
+		// Run the renderer. This is what draws the final graph.
+		render(inner, graph);
+
+		// Add event listeners to nodes:
+		inner.selectAll("g.node").on("click", Tree.selectNode);
+		// Unselecting click:
+		svg.on("click", function() {
+			inner.selectAll("g.node")
+				 .classed("selected", false);
+			 // Update Vue data:
+		 	app.selectNone();
+		});
+
+		// Center the graph
+		var xCenterOffset = (svg.attr("width") - graph.graph().width) / 2;
+		inner.attr("transform", "translate(" + xCenterOffset + ", 20)");
+		svg.attr("height", graph.graph().height + 40);
+	}
+
+	static selectNode(id) {
+		d3.event.stopPropagation();
+		console.log("Node", id, "selected");
 		inner.selectAll("g.node")
-			 .classed("selected", false);
-		 // Update Vue data:
-	 	app.selectNone();
-	});
+			 .classed("selected", function(node) { return node === id; });	// set matching one selected
+		// Update Vue data:
+		app.selectNodeById(id);
+	}
+};
 
-	// Center the graph
-	var xCenterOffset = (svg.attr("width") - g.graph().width) / 2;
-	inner.attr("transform", "translate(" + xCenterOffset + ", 20)");
-	svg.attr("height", g.graph().height + 40);
-}
 
-function selectNode(id) {
-	d3.event.stopPropagation();
-	console.log("Node", id, "selected");
-	inner.selectAll("g.node")
-		 .classed("selected", function(node) { return node === id; });	// set matching one selected
-	// Update Vue data:
-	app.selectNodeById(id);
-}
+/* UTILITY FUNCTIONS */
 
 function year(date) {
 	if (date === undefined || date.length === 0) return "?";

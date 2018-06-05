@@ -5,7 +5,7 @@ var app = new Vue({
 		author: "Martin",
 		individuals: [],
 		families: [],
-		nodes: [],
+		nodes: [],	// TODO: choose one or other
 		links: [],
 		selectedNode: null,
 		fileToUpload: ""
@@ -14,9 +14,6 @@ var app = new Vue({
 		this.fetchTreeData();
 	},
 	methods: {
-		arrangeNodes() {
-
-		},
 		fetchTreeData() {
 			axios
 			.get('/treedata')
@@ -27,9 +24,10 @@ var app = new Vue({
 				this.families = response.data.nodes.filter(n => n.type == "FAM");
 				this.links = response.data.links;
 				// Now we can graph:
-				addNodes();
-				addEdges();
-				layoutAndRender();
+				Tree.addAllNodes();
+				Tree.addAllEdges();
+				Tree.clearGraph();
+				Tree.layoutAndRender();
 			})
 			.catch(error => {
 				console.log(error);
@@ -37,9 +35,11 @@ var app = new Vue({
 			})
 			.finally(() => this.loading = false);
 		},
+
 		storeFormFile() {
 			this.fileToUpload = this.$refs.file.files[0];
 		},
+
 		submitForm() {
 			var formData = new FormData();
 			formData.append('file', this.fileToUpload);
@@ -68,17 +68,30 @@ var app = new Vue({
 		},
 
 		newIndividual() {
-			this.individuals.push(new Individual);
-			// re-render
+			var i = new Individual();
+			console.log("Created i:", i);
+			this.individuals.push(i);
+			this.nodes.push(i);
+			Tree.addIndividualNode(i);
+			Tree.clearGraph();
+			Tree.layoutAndRender();
 		},
 
 		newFamily() {
-			this.families.push(new Family);
-			// re-render
+			var f = new Family();
+			console.log("Created f:", f);
+			this.families.push(f);
+			this.nodes.push(f);
+			Tree.addFamilyNode(f);
+			Tree.clearGraph();
+			Tree.layoutAndRender();
 		},
 
 		newLink(source, target) {
-
+			this.links.push({});
+			Tree.addEdge(source, target);
+			Tree.clearGraph();
+			Tree.layoutAndRender();
 		}
 	},
 	computed: {
@@ -89,10 +102,12 @@ var app = new Vue({
 var INDI_ID = 0;
 var FAM_ID = 0;
 
+/* TEMPORARY TEMPLATES */
+
 class Individual {
-	construct() {
+	constructor() {
 		return {
-			id: INDI_ID++,
+			id: "i_" + INDI_ID++,
 			type: "INDI",
 			fname: "",
 			lname: "",
@@ -103,12 +118,13 @@ class Individual {
 }
 
 class Family {
-	construct() {
+	constructor() {
 		return {
-			id: FAM_ID++,
+			id: 'f_' + FAM_ID++,
 			type: "FAM",
 			husb: "",
 			wife: "",
+			children: [],
 			married: "",
 			events: []
 		}
