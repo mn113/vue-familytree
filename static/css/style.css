@@ -45,20 +45,22 @@ h2, h2 input {
 	border: 0;
 }
 
-/* dagre-d3: */
-
-text {
-	font-weight: 300;
-	font-family: "Helvetica Neue", Helvetica, Arial, sans-serf;
-	font-size: 14px;
-}
+/* dagre-d3 */
 #dagre-svg {
 	border: 1px solid blue;
 }
-.node rect {
+#dagre-svg .node {
+	pointer-events: all;
+}
+.node rect,
+.node .label {
+	cursor: pointer;
 	stroke: #333;
-	fill: #fff;
 	stroke-width: 1.5px;
+}
+.node.selected rect {
+	stroke: red;
+	stroke-width: 2.5px;
 }
 .edgePath path.path {
 	stroke: #333;
@@ -68,14 +70,16 @@ text {
 foreignObject p {
 	text-align: center;
 }
+text {
+	font-weight: 300;
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serf;
+	font-size: 14px;
+}
 
+/* Cytoscape.js */
 #cy {
 	width: 90vw;
 	height: 0px;
 	display: block;
 	border: 2px solid fuchsia;
-}
-
-#dagre-svg .node {
-	pointer-events: all;
 }

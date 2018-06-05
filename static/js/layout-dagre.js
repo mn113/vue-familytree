@@ -57,9 +57,7 @@ function layoutAndRender() {
 	render(inner, g);
 
 	// Add event listeners to nodes:
-	inner.selectAll("g.node").on("click", function(id) {
-		selectNode(id);
-	});
+	inner.selectAll("g.node").on("click", selectNode);
 
 	// Center the graph
 	var xCenterOffset = (svg.attr("width") - g.graph().width) / 2;
@@ -69,6 +67,8 @@ function layoutAndRender() {
 
 function selectNode(id) {
 	console.log("Node", id, "selected");
+	inner.selectAll("g.node")
+		 .classed("selected", function(node) { return node === id; });	// set matching one selected
 }
 
 function year(date) {
@@ -85,9 +85,3 @@ function fulldate(date) {
 		d = date.getDate().toString().padStart(2,"0");
 	return `${y}-${m}-${d}`;
 }
-
-svg.selectAll("g.node").on("click", function(id) {
-	console.log(id);
-	var _node = g.node(id);
-	console.log("Clicked " + id, _node);
-});
