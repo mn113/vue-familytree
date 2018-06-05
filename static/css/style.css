@@ -71,7 +71,11 @@ foreignObject p {
 
 #cy {
 	width: 90vw;
-	height: 800px;
+	height: 0px;
 	display: block;
 	border: 2px solid fuchsia;
+}
+
+#dagre-svg .node {
+	pointer-events: all;
 }
