@@ -29,7 +29,10 @@ aside {
 	grid-column: 2;
 	padding-right: 1em;
 	background: #ccc;
+	color: #222;
 	padding: 0.2em 1em;
+	font-size: 1.2em;
+	font-family: Roboto, sans-serif;
 }
 footer {
 	grid-row: 3;
