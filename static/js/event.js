@@ -27,7 +27,12 @@ Vue.component('event', {
 	template: `
 	<div class="event">
 		<div v-show="editing">
-			<span>{{ event.type }}</span>
+			<select
+				ref="type"
+				v-model="data.type">
+				<option>BIRT</option>
+				<option>DEAT</option>
+			</select>
 
 			<label for="date">Date</label>
 			<input

@@ -10,46 +10,63 @@
 header {
 	grid-row: 1;
 	grid-column: 1 / span 2;
-	border: 1px solid red;
+	xborder: 1px solid red;
+	background: #666;
+	padding: 0.2em 0.5em;
 }
 main {
 	grid-row: 2;
 	grid-column: 1;
-	border: 1px solid green;
+	xborder: 1px solid green;
+	padding: 0.2em 2em;
 }
 aside {
 	grid-row: 2;
 	grid-column: 2;
-	border: 1px solid blue;
+	xborder: 1px solid blue;
+	padding-right: 1em;
+	background: #ccc;
+	padding: 0.2em 1em;
 }
 footer {
 	grid-row: 3;
 	grid-column: 1 / span 2;
-	border: 1px solid brown;
+	xborder: 1px solid brown;
+	background: #333;
+	padding: 0.2em 0.5em;
 }
 
 #app {
 }
+
+/***********/
+/* SIDEBAR */
+/***********/
 .editing {
 	background: #eee !important;
 }
-.person {
+
+
+/********/
+/* TREE */
+/********/
+#svg .person {
 	border-width: 2px;
 }
-.family {
+#svg .family {
 	width: 7em;
 	height: 5em;
 	background: lightyellow;
 	border-radius: 50%;
 	text-align: center;
 }
-.M {
+#svg .M {
 	background: lightblue;
 }
-.F {
+#svg .F {
 	background: lightpink;
 }
-.unknown {
+#svg .unknown {
 	background: #ccc;
 }
 

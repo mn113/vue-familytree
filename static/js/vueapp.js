@@ -5,6 +5,7 @@ var app = new Vue({
 		author: "Martin",
 		individuals: [],
 		families: [],
+		nodes: [],
 		links: [],
 		selectedNode: null,
 		fileToUpload: ""
@@ -21,6 +22,7 @@ var app = new Vue({
 			.get('/treedata')
 			.then(response => {
 				console.log(response);
+				this.nodes = response.data.nodes;
 				this.individuals = response.data.nodes.filter(n => n.type == "INDI");
 				this.families = response.data.nodes.filter(n => n.type == "FAM");
 				this.links = response.data.links;
@@ -54,6 +56,14 @@ var app = new Vue({
 				this.fileToUpload = "";
 			})
 			.catch(err => console.log('Upload failed', err));
+		},
+		selectNodeById(id) {
+			var matched = this.nodes.filter(n => n.id == id);
+			console.log(matched);
+			if (matched.length > 0) this.selectedNode = matched[0];
+		},
+		selectNone() {
+			this.selectedNode = null;
 		}
 	},
 	computed: {

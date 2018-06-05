@@ -26,7 +26,18 @@
 			<svg id="dagre-svg" width="100%" height="100%"></svg>
 		</main>
 		<aside>
-			<individual :data="individuals[0]" v-bind:is="selectedNode"></individual>
+			<div v-if="selectedNode">
+				<individual
+					v-if="selectedNode.type == 'INDI'"
+					:data="selectedNode">
+				</individual>
+				<family
+					v-else-if="selectedNode.type == 'FAM'"
+					:data="selectedNode">
+				</family>
+				<span v-else>Invalid selection.</span>
+			</div>
+			<span v-else>Nothing selected.</span>
 		</aside>
 		<footer>
 			<p>&copy; {{ new Date().getFullYear() }}</p>

@@ -58,6 +58,13 @@ function layoutAndRender() {
 
 	// Add event listeners to nodes:
 	inner.selectAll("g.node").on("click", selectNode);
+	// Unselecting click:
+	svg.on("click", function() {
+		inner.selectAll("g.node")
+			 .classed("selected", false);
+		 // Update Vue data:
+	 	app.selectNone();
+	});
 
 	// Center the graph
 	var xCenterOffset = (svg.attr("width") - g.graph().width) / 2;
@@ -66,9 +73,12 @@ function layoutAndRender() {
 }
 
 function selectNode(id) {
+	d3.event.stopPropagation();
 	console.log("Node", id, "selected");
 	inner.selectAll("g.node")
 		 .classed("selected", function(node) { return node === id; });	// set matching one selected
+	// Update Vue data:
+	app.selectNodeById(id);
 }
 
 function year(date) {
