@@ -5,64 +5,35 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
 	<title>Tree45</title>
 	<link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' rel="stylesheet">
-	<link href="https://unpkg.com/vuetify/dist/vuetify.min.css" rel="stylesheet">
+	<link rel="stylesheet" href="https://unpkg.com/normalize.css@8.0.0/normalize.css">
 	<link rel="stylesheet" href="css/style.css">
 	<link rel="shortcut icon" href="favicon.ico">
 
 </head>
 <body>
-	<div>
-		<v-app id="app">
-			<v-content>
-				<v-toolbar dense prominent extended dark>
-					<v-toolbar-side-icon></v-toolbar-side-icon>
-					<v-toolbar-title>Title</v-toolbar-title>
-					<v-spacer></v-spacer>
-					<v-form>
-						<label>Choose a GEDCOM file:
-							<input type="file" id="file" ref="file" v-on:change="storeFormFile()"/>
-						</label>
-						<v-btn v-on:click="submitForm()">Upload</v-btn>
-				    </v-form>
-					<v-spacer></v-spacer>
-					<v-btn icon>
-						<v-icon>search</v-icon>
-					</v-btn>
-					<v-btn icon>
-						<v-icon>favorite</v-icon>
-					</v-btn>
-					<v-btn icon>
-						<v-icon>more_vert</v-icon>
-					</v-btn>
-				</v-toolbar>
-				<v-container fluid>
-					<h1><input v-model="title"></input></h1>
-					<h2>by <input v-model="author"></input></h2>
-					<v-layout row justify-space-between grid-list-xl wrap="true">
-						<individual
-							v-for="indiv in individuals"
-							v-bind:data=indiv
-							:key="indiv.id">
-						</individual>
-						<family
-							v-for="fam in families"
-							:data="fam"
-							:key="fam.id">
-						</family>
-					</v-layout>
-				</v-container>
-			</v-content>
-			<v-footer class="pa-3">
-				<v-spacer></v-spacer>
-				<div>&copy; {{ new Date().getFullYear() }}</div>
-			</v-footer>
-		</v-app>
-		<div id="cy"></div>
-		<svg id="dagre-svg" width="800" height="600"></svg>
+	<div  id="app" class="layout-grid">
+		<header>
+			<form>
+				<label>Choose a GEDCOM file:
+					<input type="file" id="file" ref="file" @change="storeFormFile()"/>
+				</label>
+				<button @click="submitForm()">Upload</button>
+		    </form>
+		</header>
+		<main>
+			<h1><input v-model="title"></input></h1>
+			<h2>by <input v-model="author"></input></h2>
+			<svg id="dagre-svg" width="100%" height="100%"></svg>
+		</main>
+		<aside>
+			<individual :data="individuals[0]" v-bind:is="selectedNode"></individual>
+		</aside>
+		<footer>
+			<p>&copy; {{ new Date().getFullYear() }}</p>
+		</footer>
 	</div>
 	<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 	<script src="https://unpkg.com/vue/dist/vue.js"></script>
-    <script src="https://unpkg.com/vuetify/dist/vuetify.js"></script>
 	<script src="https://d3js.org/d3.v4.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/dagre/0.8.2/dagre.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/dagre-d3/0.6.1/dagre-d3.min.js"></script>

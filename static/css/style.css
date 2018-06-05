@@ -1,23 +1,40 @@
-#app {
-	border: 1px solid teal;
-	position: relative;
+/**********/
+/* LAYOUT */
+/**********/
+.layout-grid {
+	display: grid;
+	height: 100vh;
+	grid-template-rows: 50px 1fr 50px;
+	grid-template-columns: 2fr 1fr;
 }
-figure {
-	xborder: 1px solid #333;
-	xpadding: 0.3em 0.6em;
-	xposition: absolute;
-	xfloat: left;
-	xoverflow: hidden;
+header {
+	grid-row: 1;
+	grid-column: 1 / span 2;
+	border: 1px solid red;
+}
+main {
+	grid-row: 2;
+	grid-column: 1;
+	border: 1px solid green;
+}
+aside {
+	grid-row: 2;
+	grid-column: 2;
+	border: 1px solid blue;
+}
+footer {
+	grid-row: 3;
+	grid-column: 1 / span 2;
+	border: 1px solid brown;
+}
+
+#app {
 }
 .editing {
 	background: #eee !important;
-	xwidth: 18em;
-	xheight: 10em;
 }
 .person {
 	border-width: 2px;
-	xwidth: 12em;
-	xheight: 7em;
 }
 .family {
 	width: 7em;

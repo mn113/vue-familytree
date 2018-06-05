@@ -6,7 +6,7 @@ var app = new Vue({
 		individuals: [],
 		families: [],
 		links: [],
-		editingNode: null,
+		selectedNode: null,
 		fileToUpload: ""
 	},
 	mounted() {

@@ -34,16 +34,16 @@ Vue.component('event', {
 				name="date"
 				ref="date"
 				v-model="event.date"
-				v-on:input="updateEvent()">
+				@input="updateEvent()">
 
 			<label for="place">Place</label>
 			<input
 				name="place"
 				ref="place"
 				v-model="event.place"
-				v-on:input="updateEvent()">
+				@input="updateEvent()">
 
-			<v-btn v-on:click="deleteEvent()"><v-icon>delete</v-icon></v-btn>
+			<button @click="deleteEvent()"><i>delete</i></button>
 		</div>
 		<div v-show="!editing">
 			<span>{{ event.type }}</span>
