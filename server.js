@@ -67,6 +67,7 @@ function processNodes(json) {
 		var node = json.nodes[i];
 		if (node.pointer) console.log(`${node.pointer}`.yellow);
 		if (node.data) console.log(node.data);
+
 		if (node.tag == 'INDI') {
 			var indiv = mapIndividual(node.tree);
 			indiv.id = node.pointer;
@@ -161,7 +162,7 @@ function mapIndividual(arr) {
 	pino.info('EVENT'.blue, events[0].nodeList[0].tree);
 		//.forEach(obj => { console.log(`${obj}`.red); return obj; })
 	events = events.filter(obj => obj.nodeList.length > 0)
-	.map(obj => {
+		.map(obj => {
 			return {
 				id: eventId++,
 				type: obj.type,
@@ -170,6 +171,7 @@ function mapIndividual(arr) {
 			};
 		});
 	pino.info('EVENT'.rainbow, events);
+
 	var earliest = events
 		.filter(e => ['BIRT','BAPM','CHR'].includes(e.type) && e.date)
 		.map(e => e.date)
@@ -197,14 +199,42 @@ function mapIndividual(arr) {
 // Map a family's data for the front-end:
 function mapFamily(arr) {
 	console.log('FAM'.green, arr);
-	var husband = extractValue('HUSB', arr),
-		wife = extractValue('WIFE', arr),
+	var husbands = arr.filter(node => node.tag == 'HUSB'),
+		wives = arr.filter(node => node.tag == 'WIFE'),
+		parents = [],
 		married = extractValue('MARR', arr),
 		children = arr.filter(node => node.tag == 'CHIL');
+	pino.info('HUSB'.red, husbands);
+
+	if (husbands.length > 0) parents.push(husbands[0]);
+	if (wives.length > 0) parents.push(wives[0]);
+	// 
+	parents = parents.map(p => p.data);
+
+	var events = ['MARR','DIV']	// what else?
+		.map(key => {
+			return {
+				type: key,
+				nodeList: arr.filter(node => node.tag == key)
+			};
+		});
+	//pino.info('EVENT'.blue, events[0].nodeList[0].tree);
+	events = events.filter(obj => obj.nodeList.length > 0)
+		.map(obj => {
+			return {
+				id: eventId++,
+				type: obj.type,
+				date: Date.parse(extractValue('DATE', obj.nodeList)),	// to milliseconds
+				place: extractValue('PLAC', obj.nodeList)
+			};
+		});
+	pino.info('EVENT'.rainbow, events);
+
 	return {
-		husband: husband || "",
-		wife: wife || "",
-		married: married || "",
-		children: children.length > 0 ? children.map(obj => obj.data) : null
+		parents: parents,
+		married: married || "unknown",
+		children: children.length > 0 ? children.map(obj => obj.data) : null,
+		events: events,
+		notes: []
 	};
 }

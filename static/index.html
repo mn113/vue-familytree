@@ -32,11 +32,13 @@
 			<div v-if="selectedNode">
 				<individual
 					v-if="selectedNode.type == 'INDI'"
-					:data="selectedNode">
+					:data="selectedNode"
+					@update="selectedNode = arguments[0]">
 				</individual>
 				<family
 					v-else-if="selectedNode.type == 'FAM'"
-					:data="selectedNode">
+					:data="selectedNode"
+					@update="selectedNode = arguments[0]">
 				</family>
 				<span v-else>Invalid selection.</span>
 			</div>

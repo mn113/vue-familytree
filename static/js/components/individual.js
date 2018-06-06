@@ -10,13 +10,13 @@ Vue.component('individual', {
 	},
 	methods: {
 		update: function() {
-			// Only this one emits signal back to parent
-			this.$emit('input', {
+			// Emit signal back to parent:
+			this.$emit('update', Object.assign({	// retain all data while updating editables
 				fname: this.$refs.fname.value,
 				lname: this.$refs.lname.value,
 				sex: this.$refs.sex.value,
 				events: this.data.events
-			});
+			}), this.data);
 			Tree.redraw();
 		}
     },
@@ -30,7 +30,7 @@ Vue.component('individual', {
 			if (this.data.famsChildOf.length === 0) return null;
 			var fam = this.data.famsChildOf.map(fid => app.getFamilyById(fid))[0];
 			console.log('parFam', fam);
-			return [fam.husband, fam.wife];	// not good!
+			return fam.parents.map(pid => app.getIndividualById(pid));
 		},
 
 		siblings() {
@@ -59,7 +59,7 @@ Vue.component('individual', {
 		}
 	},
 	template: `
-		<div :id="data.id" :class="[data.sex, {editing: editing}]" class="person">
+		<div :class="[data.sex, {editing: editing}]">
 			<div v-show="editing">
 				<i class="right" v-on:click="update">close</i>
 				<i class="right" v-on:click="toggleEdit">save</i>
@@ -101,6 +101,7 @@ Vue.component('individual', {
 				<div class="dates">
 					<event v-for="event in data.events"
 						:event="event"
+						:parentType="'INDI'"
 						:key="event.id"
 						:editing="true"></event>
 					<button v-on:click="addEvent()" class="right"><i>add</i>Add Event</button>

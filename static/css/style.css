@@ -125,7 +125,8 @@ i:hover {
 	stroke: #333;
 	stroke-width: 1.5px;
 }
-.node.selected rect {
+.node.selected rect,
+.node.selected ellipse {
 	stroke: red;
 	stroke-width: 2.5px;
 }

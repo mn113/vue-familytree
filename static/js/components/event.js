@@ -1,6 +1,7 @@
 Vue.component('event', {
 	props: {
 		'event': Object,
+		'parentType': String,
 		'editing': Boolean	// from parent
 	},
 	methods: {
@@ -22,6 +23,10 @@ Vue.component('event', {
 		},
 		year() {
 			return year(this.event.date);
+		},
+		eventTypes() {
+			if (this.parentType == 'INDI') return ['Birth', 'Death'];
+			else if (this.parentType == 'FAM') return ['Marriage', 'Divorce'];
 		}
 	},
 	template: `
@@ -30,8 +35,7 @@ Vue.component('event', {
 			<select
 				ref="type"
 				v-model="event.type">
-				<option>BIRT</option>
-				<option>DEAT</option>
+				<option v-for="type in eventTypes">{{ type }}</option>
 			</select>
 
 			<label for="date">Date</label>
