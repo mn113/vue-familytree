@@ -78,6 +78,9 @@ i:hover {
 .editing {
 	background: #eee !important;
 }
+.right {
+	float: right;
+}
 
 
 /********/
@@ -122,6 +125,13 @@ i:hover {
 .node.selected rect {
 	stroke: red;
 	stroke-width: 2.5px;
+}
+.node .text {
+	font-family: "Material Icons";
+	cursor: pointer;
+}
+.node .text:hover {
+	color: red;
 }
 .edgePath path.path {
 	stroke: #333;

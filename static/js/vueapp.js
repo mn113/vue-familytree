@@ -60,11 +60,21 @@ var app = new Vue({
 
 		selectNodeById(id) {
 			var matched = this.nodes.filter(n => n.id == id);
-			console.log(matched);
 			if (matched.length > 0) this.selectedNode = matched[0];
 		},
+
 		selectNone() {
 			this.selectedNode = null;
+		},
+
+		getFamilyById(id) {
+			var matched = this.families.filter(n => n.id == id);
+			return (matched.length > 0) ? matched[0] : null;
+		},
+
+		getIndividualById(id) {
+			var matched = this.individuals.filter(n => n.id == id);
+			return (matched.length > 0) ? matched[0] : null;
 		},
 
 		newIndividual() {
