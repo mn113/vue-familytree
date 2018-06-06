@@ -1,4 +1,5 @@
 Vue.component('individual', {
+	mixins: [treeNodeMixin],
 	props: {
 		data: Object
 	},
@@ -8,28 +9,7 @@ Vue.component('individual', {
 		}
 	},
 	methods: {
-        toggleEdit: function() {
-            this.editing = !this.editing;
-        },
-
-		addEvent: function() {
-			this.data.events.push({
-				type: "",
-				date: "",
-				place: ""
-			});
-			this.updateIndividual();
-		},
-/*		deleteEvent: function(i) {
-			this.data.events.splice(i,1);
-			this.updateIndividual();
-		},
-		updateEvent: function(i, value) {
-			this.data.events[i] = value;
-			this.updateIndividual();
-		},*/
-
-		updateIndividual: function() {
+		update: function() {
 			// Only this one emits signal back to parent
 			this.$emit('input', {
 				fname: this.$refs.fname.value,
@@ -37,30 +17,12 @@ Vue.component('individual', {
 				sex: this.$refs.sex.value,
 				events: this.data.events
 			});
-		},
-
-		disconnectFrom(otherNode) {
-			// delete edge
-			// remove person's family
-			// remove family's person
-			// re-render
-		},
-
-		attachTo(otherNode) {
-			// add edge
-			// add person to family
-			// add family to person
-			// re-render
+			Tree.redraw();
 		}
     },
 	computed: {
 		symbol() {
 			return this.data.sex == 'M' ? '♂' : this.data.sex == 'F' ? '♀' : '';
-		},
-
-		events() {
-			// Always sort person's events chronologically:
-			return this.data.events.sort((a,b) => { b.date - a.date; });
 		},
 
 		parents() {
@@ -99,36 +61,37 @@ Vue.component('individual', {
 	template: `
 		<div :id="data.id" :class="[data.sex, {editing: editing}]" class="person">
 			<div v-show="editing">
-				<i class="right" v-on:click="toggleEdit">close</i>
+				<i class="right" v-on:click="update">close</i>
+				<i class="right" v-on:click="toggleEdit">save</i>
 
 				<h3>Names</h3>
 				<div row>
 					<label>First name(s)</label>
 					<input
 						name="fname"
-						label="First name(s)"
+						label="First"
 						ref="fname"
-						v-model="data.fname"
-						v-on:input="updateFirstName($event.target.value)"
-					></input>
+						:value="data.fname"
+						@input="update">
+					</input>
 				</div>
 				<div row>
 					<label>Last name(s)</label>
 					<input
 						name="lname"
-						label="Last name(s)"
+						label="Last"
 						ref="lname"
-						v-model="data.lname"
-						v-on:input="updateLastName($event.target.value)"
-					></input>
+						:value="data.lname"
+						@input="update">
+					</input>
 				</div>
 
 				<label for="sex">Sex</label>
 				<select
 					name="sex"
 					ref="sex"
-					v-model="data.sex"
-					v-on:input="updateSex($event.target.value)">
+					:value="data.sex"
+					@input="update">
 					<option>M</option>
 					<option>F</option>
 					<option>unknown</option>
@@ -140,7 +103,7 @@ Vue.component('individual', {
 						:event="event"
 						:key="event.id"
 						:editing="true"></event>
-					<button v-on:click="addEvent()"><i>add</i></button>
+					<button v-on:click="addEvent()" class="right"><i>add</i>Add Event</button>
 				</div>
 			</div>
 

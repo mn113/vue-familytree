@@ -36,6 +36,7 @@ Vue.component('event', {
 
 			<label for="date">Date</label>
 			<input
+				style="width:5.5em"
 				name="date"
 				ref="date"
 				:value="fulldate"
@@ -43,6 +44,7 @@ Vue.component('event', {
 
 			<label for="place">Place</label>
 			<input
+				style="width:7em"
 				name="place"
 				ref="place"
 				v-model="event.place"
@@ -50,10 +52,11 @@ Vue.component('event', {
 
 			<button @click="deleteEvent()"><i>delete</i></button>
 		</div>
+
 		<div v-show="!editing">
 			<span>{{ event.type }}</span>
-			<span>{{ event.place }}</span>
 			<span>{{ fulldate }}</span>
+			<span>{{ event.place }}</span>
 		</div>
 	</div>`
 });

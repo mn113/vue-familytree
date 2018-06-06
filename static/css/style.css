@@ -58,7 +58,10 @@ h2 input {
 	font: 1.5em bold serif;
 	border: 0;
 }
-h3, h3 input {
+h3 {
+	font: 1.2em bold Roboto, sans-serif;
+}
+h4, h4 input {
 	font: 1.2em bold serif;
 	border: 0;
 }
@@ -111,7 +114,7 @@ i:hover {
 /* DAGRE-D3 */
 /************/
 #dagre-svg {
-	border: 1px solid blue;
+	border: 1px solid #ccc;
 }
 #dagre-svg .node {
 	pointer-events: all;
@@ -126,11 +129,11 @@ i:hover {
 	stroke: red;
 	stroke-width: 2.5px;
 }
-.node .text {
+.node text {
 	font-family: "Material Icons";
 	cursor: pointer;
 }
-.node .text:hover {
+.node text:hover {
 	color: red;
 }
 .edgePath path.path {
@@ -141,6 +144,6 @@ i:hover {
 #dagre-svg .label p {
 	text-align: center;
 	font-weight: 300;
-	font-family: "Helvetica Neue", Helvetica, Arial, sans-serf;
+	font-family: Roboto, sans-serf;
 	font-size: 14px;
 }

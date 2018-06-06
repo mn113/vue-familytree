@@ -90,8 +90,15 @@ class Tree {
 		svg.attr("height", graph.graph().height + 40);
 	}
 
+	static redraw() {
+		console.info("Redrawing.");
+		Tree.clearGraph();
+		Tree.layoutAndRender();
+		Tree.selectNode(app.selectedNode.id);
+	}
+
 	static selectNode(id) {
-		d3.event.stopPropagation();
+		if (d3.event !== null) d3.event.stopPropagation();
 		console.log("Node", id, "selected");
 		inner.selectAll("g.node")
 			 .classed("selected", function(node) { return node === id; });	// set matching one selected
