@@ -29,7 +29,7 @@ Vue.component('individual', {
 
         parents() {
             // Get family above me, resolve its parents as Objects:
-            if (this.data.famsChildOf.length === 0) return null;
+            if (this.data.famsChildOf.length === 0) return [];
             var fam = this.data.famsChildOf.map(fid => app.getFamilyById(fid))[0];
             console.log('parFam', fam);
             return fam.parents.map(pid => app.getIndividualById(pid));
@@ -37,7 +37,7 @@ Vue.component('individual', {
 
         siblings() {
             // Get family above me, resolve its kids as Objects:
-            if (this.data.famsChildOf.length === 0) return null;
+            if (this.data.famsChildOf.length === 0) return [];
             var fam = this.data.famsChildOf.map(fid => app.getFamilyById(fid))[0];
             console.log('sibFam', fam);
             return fam.children.map(pid => app.getIndividualById(pid));
@@ -45,17 +45,17 @@ Vue.component('individual', {
 
         families() {
             // Get families below me. Resolve all ids to Objects:
-            if (this.data.famsHeadOf.length === 0) return null;
+            if (this.data.famsHeadOf.length === 0) return [];
             var fams = this.data.famsHeadOf.map(fid => app.getFamilyById(fid));
             console.log('kidsFams', fams);
             return fams.map(fam => {
-                var spouseId = (fam.husband === this.data.id) ? fam.wife : (fam.wife === this.data.id) ? fam.husband : null;
-                console.log('spouseId', spouseId);
-                var spouse = (spouseId) ? app.getIndividualById(spouseId) : null;
+                var spouses = fam.parents.filter(pers => pers.id !== this.data.id);
+                console.log('spouses', spouses);
+                var spouse = (spouses.length > 0) ? app.getIndividualById(spouses[0]) : null;
                 var children = fam.children.map(cid => app.getIndividualById(cid));
                 return {
-                    spouse: spouse,
-                    children: children
+                    spouse,
+                    children    // ES6 object shorthand
                 };
             });
         }
@@ -125,25 +125,26 @@ Vue.component('individual', {
 
     <h3>Parents</h3>
     <ul v-if="parents.length > 0">
-    <li v-for="p in parents">
-    <person-line v-bind="p"></person-line>
+    <li v-for="par in parents">
+    <person-line v-bind="par"></person-line>
     </li>
     </ul>
 
     <h3>Siblings</h3>
     <ol v-if="siblings.length > 0">
-    <li v-for="s in siblings">
-    <person-line v-bind="s"></person-line>
+    <li v-for="sib in siblings">
+    <person-line v-bind="sib"></person-line>
     </li>
     </ol>
 
     <h3>Families</h3>
     <ol v-if="families.length > 0">
-    <li v-for="f in families">
-    Spouse: {{ f.spouse }}
+    <li v-for="fam in families">
+    Spouse: <person-line v-bind="fam.spouse"></person-line>
+    Children:
     <ol>
-    <li v-for="c in f.children">
-    <person-line v-bind="c"></person-line>
+    <li v-for="chi in fam.children">
+    <person-line v-bind="chi"></person-line>
     </li>
     </ol>
     </li>
