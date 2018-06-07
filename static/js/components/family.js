@@ -66,12 +66,16 @@ Vue.component('family', {
 
 				<h3>Parents</h3>
 				<ul>
-					<li v-for="p in resolvedParents">{{ p.fname }} <b>{{ p.lname }}</b></li>
+					<li v-for="p in resolvedParents">
+						<person-line v-bind="p"></person-line>
+					</li>
 				</ul>
 
 				<h3>Children</h3>
 				<ul>
-					<li v-for="c in resolvedChildren">{{ c.fname }} <b>{{ c.lname }}</b></li>
+					<li v-for="c in resolvedChildren">
+						<person-line v-bind="c"></person-line>
+					</li>
 				</ul>
 
 				<h3>Events</h3>

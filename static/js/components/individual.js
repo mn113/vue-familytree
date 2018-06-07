@@ -123,12 +123,16 @@ Vue.component('individual', {
 
 				<h3>Parents</h3>
 				<ul v-if="parents.length > 0">
-					<li v-for="p in parents">{{ p.fname }} <b>{{ p.lname }}</b></li>
+					<li v-for="p in parents">
+						<person-line v-bind="p"></person-line>
+					</li>
 				</ul>
 
 				<h3>Siblings</h3>
 				<ol v-if="siblings.length > 0">
-					<li v-for="p in siblings">{{ p.fname }} <b>{{ p.lname }}</b></li>
+					<li v-for="s in siblings">
+						<person-line v-bind="s"></person-line>
+					</li>
 				</ol>
 
 				<h3>Families</h3>
@@ -136,7 +140,9 @@ Vue.component('individual', {
 					<li v-for="f in families">
 						Spouse: {{ f.spouse }}
 						<ol>
-							<li v-for="c in f.children">{{ c.fname }} <b>{{ c.lname }}</b></li>
+							<li v-for="c in f.children">
+								<person-line v-bind="c"></person-line>
+							</li>
 						</ol>
 					</li>
 				</ol>

@@ -54,6 +54,7 @@ function readGedcomFile(filename) {
 		if (err) throw err;
 		const json = parser.parse(data);
 		console.log(json);
+		//fs.writeFile('gedcom.json', JSON.stringify(json), (err) => { console.log(err); });
 		const linkedJson = (parser.d3ize(json));
 		treeData.nodes = processNodes(linkedJson);
 		treeData.links = processLinks(linkedJson);
@@ -208,7 +209,7 @@ function mapFamily(arr) {
 
 	if (husbands.length > 0) parents.push(husbands[0]);
 	if (wives.length > 0) parents.push(wives[0]);
-	// 
+	//
 	parents = parents.map(p => p.data);
 
 	var events = ['MARR','DIV']	// what else?
