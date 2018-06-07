@@ -84,6 +84,17 @@ i:hover {
 .right {
 	float: right;
 }
+.clearfix:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+.personLine {
+	font-size: 0.9em;
+}
+.personLine span {
+	font-size: 0.8em;
+}
 
 
 /********/
@@ -115,6 +126,7 @@ i:hover {
 /************/
 #dagre-svg {
 	border: 1px solid #ccc;
+	min-height: 600px;
 }
 #dagre-svg .node {
 	pointer-events: all;
