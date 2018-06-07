@@ -1,4 +1,11 @@
+/* global Tree */
+
 var treeNodeMixin = {  // eslint-disable-line no-unused-vars
+    updated() {
+        // This line keeps the SVG synced with the Vue data:
+        // Move if not performant on larger trees
+        Tree.redraw();
+    },
     methods: {
         toggleEdit() {
             this.editing = !this.editing;
@@ -11,6 +18,7 @@ var treeNodeMixin = {  // eslint-disable-line no-unused-vars
                 place: ""
             });
             this.update();
+            this.editing = true;
         },
         /*
         deleteEvent: function(i) {

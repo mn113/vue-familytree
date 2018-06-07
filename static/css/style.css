@@ -61,6 +61,10 @@ h2 input {
 h3 {
 	font: 1.2em bold Roboto, sans-serif;
 }
+h3 span {
+    font-size: 0.8em;
+    color: #888;
+}
 h4, h4 input {
 	font: 1.2em bold serif;
 	border: 0;
@@ -127,6 +131,7 @@ i:hover {
 #dagre-svg {
 	border: 1px solid #ccc;
 	min-height: 600px;
+    min-width: 600px;
 }
 #dagre-svg .node {
 	pointer-events: all;

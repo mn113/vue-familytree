@@ -1,4 +1,4 @@
-/* global Tree, axios, year, fulldate */
+/* global Tree, axios */
 
 var app = new Vue({ // eslint-disable-line no-unused-vars
     el: '#app',
@@ -27,7 +27,6 @@ var app = new Vue({ // eslint-disable-line no-unused-vars
                     // Now we can graph:
                     Tree.addAllNodes();
                     Tree.addAllEdges();
-                    Tree.clearGraph();
                     Tree.layoutAndRender();
                 })
                 .catch(error => {
@@ -82,7 +81,7 @@ var app = new Vue({ // eslint-disable-line no-unused-vars
             this.individuals.push(i);
             this.nodes.push(i);
             Tree.addIndividualNode(i);
-            Tree.clearGraph();
+            //Tree.clearGraph();
             Tree.layoutAndRender();
         },
 
@@ -92,14 +91,14 @@ var app = new Vue({ // eslint-disable-line no-unused-vars
             this.families.push(f);
             this.nodes.push(f);
             Tree.addFamilyNode(f);
-            Tree.clearGraph();
+            //Tree.clearGraph();
             Tree.layoutAndRender();
         },
 
         newLink(source, target) {
             this.links.push({});
             Tree.addEdge(source, target);
-            Tree.clearGraph();
+            //Tree.clearGraph();
             Tree.layoutAndRender();
         }
     },

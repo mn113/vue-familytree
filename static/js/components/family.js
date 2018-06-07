@@ -41,56 +41,56 @@ Vue.component('family', {
             <select
                 name="married"
                 ref="married"
-                :value="data.married">
+                v-model="data.married">
                 <option>Married</option>
                 <option>Unmarried</option>
                 <option>Unknown</option>
             </select>
 
-            <h3>Parents</h3>
+            <h3>Parents <span>({{ data.parents.length }})</span></h3>
             <ul>
-                <li v-for="p in resolvedParents">
-                    <person-line v-bind="p"></person-line>
+                <li v-for="par in resolvedParents">
+                    <person-line v-bind="par"></person-line>
                 </li>
             </ul>
 
-            <h3>Children</h3>
+            <h3>Children <span>({{ data.children.length }})</span></h3>
             <ul>
-                <li v-for="p in resolvedParents">
-                    <person-line v-bind="p"></person-line>
+                <li v-for="chi in resolvedChildren">
+                    <person-line v-bind="chi"></person-line>
                 </li>
             </ul>
 
-            <h3>Events</h3>
+            <h3>Events <span>({{ data.events.length }})</span></h3>
             <div class="dates clearfix">
                 <event v-for="event in data.events"
                     :event="event"
                     :key="event.id"
                     :parentType="'FAM'"
-                    :editing="true"></event>
-                    <button v-on:click="addEvent()" class="right"><i>add</i>Add Event</button>
+                    :editing="true">
                 </event>
+                <button v-on:click="addEvent()" class="right"><i>add</i>Add Event</button>
             </div>
         </div>
 
         <div v-show="!editing">
             <i class="right" v-on:click="toggleEdit">edit</i>
 
-            <h3>Parents</h3>
+            <h3>Parents <span>({{ data.parents.length }})</span></h3>
             <ul>
-                <li v-for="p in resolvedParents">
-                    <person-line v-bind="p"></person-line>
+                <li v-for="par in resolvedParents">
+                    <person-line v-bind="par"></person-line>
                 </li>
             </ul>
 
-            <h3>Children</h3>
+            <h3>Children <span>({{ data.children.length }})</span></h3>
             <ul>
-                <li v-for="c in resolvedChildren">
-                    <person-line v-bind="c"></person-line>
+                <li v-for="chi in resolvedChildren">
+                    <person-line v-bind="chi"></person-line>
                 </li>
             </ul>
 
-            <h3>Events</h3>
+            <h3>Events <span>({{ data.events.length }})</span></h3>
             <div class="dates clearfix">
                 <event v-for="event in data.events"
                     :event="event"

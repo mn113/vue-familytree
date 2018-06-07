@@ -4,12 +4,16 @@
 var graph = new dagreD3.graphlib.Graph();
 // Set an object for the graph label
 graph.setGraph({});
+// Default to assigning a new object as a label for each new edge.
+graph.setDefaultNodeLabel(() => {});
+graph.setDefaultEdgeLabel(() => {});
 
 // Set up an SVG group so that we can translate the final graph.
 var svg = d3.select("svg"),
     inner = svg.append("g");
 
 class Tree {
+    // Add or update a node and its label in the graph:
     static addIndividualNode(node) {
         graph.setNode(node.id, {
             labelType: "html",
@@ -24,6 +28,7 @@ class Tree {
         });
     }
 
+    // Add or update a node and its label in the graph:
     static addFamilyNode(node) {
         graph.setNode(node.id, {
             labelType: "html",
@@ -39,11 +44,12 @@ class Tree {
         });
     }
 
+    // Add or update an edge in the graph:
     static addEdge(source, target) {
         graph.setEdge(source, target, { curve: d3.curveBasis });
     }
 
-    // Add all the Vue nodes data to the graph:
+    // Batch add all the Vue nodes to the graph:
     static addAllNodes() {
         // Individuals:
         for (var indiNode of app.individuals) {
@@ -55,7 +61,7 @@ class Tree {
         }
     }
 
-    // Add all the Vue edges data to the graph:
+    // Batch add all the Vue edges to the graph:
     static addAllEdges() {
         for (var link of app.links) {
             Tree.addEdge(link.source, link.target);
@@ -65,6 +71,12 @@ class Tree {
     // Erase the graph: (preserves graph data)
     static clearGraph() {
         inner.html("");
+    }
+
+    static rebuildGraph() {
+        // Graph doesn't need to be cleared; these functions update existing node labels
+        Tree.addAllNodes();
+        Tree.addAllEdges();
     }
 
     // Draw a new graph:
@@ -96,7 +108,7 @@ class Tree {
 
     static redraw() {
         console.info("Redrawing.");
-        Tree.clearGraph();
+        Tree.rebuildGraph();
         Tree.layoutAndRender();
         Tree.selectNode(app.selectedNode.id);
     }

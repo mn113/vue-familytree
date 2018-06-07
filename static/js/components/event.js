@@ -9,10 +9,10 @@ Vue.component('event', {
     methods: {
         // Talk to parent:
         deleteEvent() {
-            this.$emit('input', null);	// FIXME better way to delete?
+            this.$emit('update', null);	// FIXME better way to delete?
         },
         updateEvent() {
-            this.$emit('input', {
+            this.$emit('update', {
                 type: this.event.type,
                 date: this.$refs.date.value,
                 place: this.$refs.place.value
@@ -53,7 +53,7 @@ Vue.component('event', {
                 style="width:7em"
                 name="place"
                 ref="place"
-                v-model="event.place"
+                :value="event.place"
                 @input="updateEvent()">
 
             <button @click="deleteEvent()"><i>delete</i></button>
