@@ -17,19 +17,29 @@ var treeNodeMixin = {  // eslint-disable-line no-unused-vars
                 date: "",
                 place: ""
             });
-            this.update();
-            this.editing = true;
+            //this.update();
+            //this.editing = true;
         },
-        /*
-        deleteEvent: function(i) {
-            this.data.events.splice(i,1);
-            this.update();
+
+        deleteEvent(id) {
+            // Find event index in array by id:
+            var i = this.data.events.findIndex(e => e.id === id);
+            if (i > -1) {
+                this.data.events.splice(i,1);
+                //this.update();
+                //this.editing = true;
+            }
         },
-        updateEvent: function(i, value) {
-            this.data.events[i] = value;
-            this.update();
+
+        updateEvent(id, value) {
+            // Find event index in array by id:
+            var i = this.data.events.findIndex(e => e.id === id);
+            if (i > -1) {
+                this.data.events[i] = value;
+                //this.update();
+                //this.editing = true;
+            }
         },
-*/
 
         disconnectFrom(otherNode) {
             // delete edge
@@ -46,9 +56,9 @@ var treeNodeMixin = {  // eslint-disable-line no-unused-vars
         }
     },
     computed: {
-        events() {
+        sortedEvents() {
             // Always sort person's events chronologically:
-            return this.data.events.sort((a, b) => b.date - a.date);
+            return this.data.events.sort((a, b) => a.date - b.date);
         }
     }
 };

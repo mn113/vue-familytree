@@ -17,7 +17,6 @@ Vue.component('family', {
                 married: this.$refs.married.value,
                 events: this.data.events
             }), this.data);
-            Tree.redraw();
         }
     },
     computed: {
@@ -32,10 +31,10 @@ Vue.component('family', {
         }
     },
     template: `
-    <div :class="[data.sex, {editing: editing}]">
+    <div :class="{editing: editing}">
         <div v-show="editing">
-            <i class="right" v-on:click="update">close</i>
-            <i class="right" v-on:click="toggleEdit">save</i>
+            <i class="right" @click="update">close</i>
+            <i class="right" @click="toggleEdit">save</i>
 
             <label for="married">Married?</label>
             <select
@@ -49,50 +48,51 @@ Vue.component('family', {
 
             <h3>Parents <span>({{ data.parents.length }})</span></h3>
             <ul>
-                <li v-for="par in resolvedParents">
-                    <person-line v-bind="par"></person-line>
+                <li v-for="parent in resolvedParents">
+                    <person-line v-bind="parent"></person-line>
                 </li>
             </ul>
 
             <h3>Children <span>({{ data.children.length }})</span></h3>
             <ul>
-                <li v-for="chi in resolvedChildren">
-                    <person-line v-bind="chi"></person-line>
+                <li v-for="child in resolvedChildren">
+                    <person-line v-bind="child"></person-line>
                 </li>
             </ul>
 
             <h3>Events <span>({{ data.events.length }})</span></h3>
             <div class="dates clearfix">
-                <event v-for="event in data.events"
+                <event v-for="event in sortedEvents"
                     :event="event"
                     :key="event.id"
                     :parentType="'FAM'"
-                    :editing="true">
+                    :editing="true"
+                    @update="event = arguments[0]"><!-- can't target by index -->
                 </event>
-                <button v-on:click="addEvent()" class="right"><i>add</i>Add Event</button>
+                <button @click="addEvent" class="right"><i>add</i>Add Event</button>
             </div>
         </div>
 
         <div v-show="!editing">
-            <i class="right" v-on:click="toggleEdit">edit</i>
+            <i class="right" @click="toggleEdit">edit</i>
 
             <h3>Parents <span>({{ data.parents.length }})</span></h3>
             <ul>
-                <li v-for="par in resolvedParents">
-                    <person-line v-bind="par"></person-line>
+                <li v-for="parent in resolvedParents">
+                    <person-line v-bind="parent"></person-line>
                 </li>
             </ul>
 
             <h3>Children <span>({{ data.children.length }})</span></h3>
             <ul>
-                <li v-for="chi in resolvedChildren">
-                    <person-line v-bind="chi"></person-line>
+                <li v-for="child in resolvedChildren">
+                    <person-line v-bind="child"></person-line>
                 </li>
             </ul>
 
             <h3>Events <span>({{ data.events.length }})</span></h3>
             <div class="dates clearfix">
-                <event v-for="event in data.events"
+                <event v-for="event in sortedEvents"
                     :event="event"
                     :key="event.id"
                     :editing="false">

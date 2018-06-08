@@ -183,8 +183,8 @@ function mapIndividual(arr) {
         famsHeadOf: fams.length > 0 ? fams.map(obj => obj.data) : [],
         famsChildOf: famc.length > 0 ? famc.map(obj => obj.data) : [],
         events: events,
-        start: earliest !== undefined ? earliest : "",
-        end: latest !== undefined ? latest : "",
+        firstDate: earliest !== undefined ? earliest : "",
+        lastDate: latest !== undefined ? latest : "",
         notes: []
     };
 }
@@ -219,9 +219,13 @@ function mapFamily(arr) {
         }));
     pino.info('EVENT'.rainbow, events);
 
+    var marriages = events.filter(e => e.type === "MARR");
+    var marriageDate = (marriages.length > 0) ? marriages[0].date : "";
+
     return {
         parents: parents,
         married: married || "unknown",
+        marriageDate: marriageDate,
         children: children.length > 0 ? children.map(obj => obj.data) : [],
         events: events,
         notes: []

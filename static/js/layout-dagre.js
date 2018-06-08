@@ -20,7 +20,7 @@ class Tree {
             label: `
             <div id="${node.id}">
                 <p>${node.fname} <b>${node.lname}</b></p>
-                <p>${year(node.start)} - ${year(node.end)}</p>
+                <p>${year(node.firstDate)} - ${year(node.lastDate)}</p>
             </div>`,
             width: 50 + 3 * (node.fname.length + node.lname.length),
             height: 40,
@@ -34,7 +34,7 @@ class Tree {
             labelType: "html",
             label: `
             <div id="${node.id}">
-                <p>${node.married}</p>
+                <p>m. ${year(node.marriageDate)}</p>
                 <p>${node.children.length} children</p>
             </div>`,
             shape: "ellipse",

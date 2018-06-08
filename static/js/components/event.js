@@ -9,12 +9,12 @@ Vue.component('event', {
     methods: {
         // Talk to parent:
         deleteEvent() {
-            this.$emit('update', null);	// FIXME better way to delete?
+            this.$emit('delete');
         },
         updateEvent() {
             this.$emit('update', {
                 type: this.event.type,
-                date: this.$refs.date.value,
+                date: new Date(this.$refs.date.value),
                 place: this.$refs.place.value
             });
         }
@@ -27,7 +27,7 @@ Vue.component('event', {
             return year(this.event.date);
         },
         eventTypes() {
-            if (this.parentType === 'INDI') return ['Birth', 'Death'];
+            if (this.parentType === 'INDI') return ['Birth', 'Christening', 'Baptism', 'Death', 'Burial', 'Cremation'];
             else if (this.parentType === 'FAM') return ['Marriage', 'Divorce'];
         }
     },
@@ -46,7 +46,7 @@ Vue.component('event', {
                 name="date"
                 ref="date"
                 :value="fulldate"
-                @input="updateEvent()">
+                @blur="updateEvent">
 
             <label for="place">Place</label>
             <input
@@ -54,9 +54,9 @@ Vue.component('event', {
                 name="place"
                 ref="place"
                 :value="event.place"
-                @input="updateEvent()">
+                @blur="updateEvent">
 
-            <button @click="deleteEvent()"><i>delete</i></button>
+            <button @click="deleteEvent"><i>delete</i></button>
         </div>
 
         <div v-show="!editing">

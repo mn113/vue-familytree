@@ -7,8 +7,25 @@ Vue.component('individual', {
     },
     data() {
         return {
-            editing: false
+            editing: false,
+            firstDate: this.data.start, // kept in state so we can update them as Events change
+            lastDate: this.data.end,
+            dateError: false
         };
+    },
+    updated() {
+        // Keep start and end dates up-to-date:
+        this.firstDate = this.data.events
+            .filter(e => ['BIRT','BAPM','CHR'].includes(e.type) && e.date)
+            .map(e => e.date)
+            .sort()
+            .shift();
+        this.lastDate = this.data.events
+            .filter(e => ['DEAT','BURI','CREM'].includes(e.type) && e.date)
+            .map(e => e.date)
+            .sort()
+            .shift();
+        this.dateError = (this.lastDate < this.firstDate);
     },
     methods: {
         update() {
@@ -60,7 +77,7 @@ Vue.component('individual', {
         }
     },
     template: `
-    <div :class="[data.sex, {editing: editing}]">
+    <div :class="{editing: editing}">
         <div v-show="editing">
             <i class="right" v-on:click="update">close</i>
             <i class="right" v-on:click="toggleEdit">save</i>
@@ -100,12 +117,13 @@ Vue.component('individual', {
             <h3>Events <span>({{ data.events.length }})</span></h3>
 
             <div class="dates clearfix">
-                <event v-for="event in data.events"
+                <event v-for="event in sortedEvents"
                     :event="event"
                     :parentType="'INDI'"
                     :key="event.id"
                     :editing="true"
-                    @update="event = arguments[0]">
+                    @update="updateEvent(event.id, arguments[0])"
+                    @delete="deleteEvent(event.id)">
                 </event>
 
                 <button @click="addEvent()" class="right"><i>add</i>Add Event</button>
@@ -120,7 +138,7 @@ Vue.component('individual', {
             <h3>Events <span>({{ data.events.length }})</span></h3>
 
             <div class="dates clearfix">
-                <event v-for="event in data.events"
+                <event v-for="event in sortedEvents"
                     :event="event"
                     :key="event.id"
                     :editing="false">
@@ -130,28 +148,28 @@ Vue.component('individual', {
             <h3>Parents <span>({{ parents.length }})</span></h3>
 
             <ul v-if="parents.length > 0">
-                <li v-for="par in parents">
-                    <person-line v-bind="par"></person-line>
+                <li v-for="parent in parents">
+                    <person-line v-bind="parent"></person-line>
                 </li>
             </ul>
 
             <h3>Siblings <span>({{ siblings.length }})</span></h3>
 
             <ol v-if="siblings.length > 0">
-                <li v-for="sib in siblings">
-                    <person-line v-bind="sib"></person-line>
+                <li v-for="sibling in siblings">
+                    <person-line v-bind="sibling"></person-line>
                 </li>
             </ol>
 
             <h3>Families <span>({{ families.length }})</span></h3>
 
             <ol v-if="families.length > 0">
-                <li v-for="fam in families">
-                    Spouse: <person-line v-bind="fam.spouse"></person-line>
-                    <h3 v-if="fam.children.length > 0">Children: <span>({{ fam.children.length }})</span></h3>
+                <li v-for="family in families">
+                    Spouse: <person-line v-bind="family.spouse"></person-line>
+                    <h3 v-if="family.children.length > 0">Children: <span>({{ family.children.length }})</span></h3>
                     <ol>
-                        <li v-for="chi in fam.children">
-                            <person-line v-bind="chi"></person-line>
+                        <li v-for="child in family.children">
+                            <person-line v-bind="child"></person-line>
                         </li>
                     </ol>
                 </li>
