@@ -100,9 +100,11 @@ class Tree {
             app.selectNone();
         });
 
-        // Center the graph
-        var xCenterOffset = (svg.attr("width") - graph.graph().width) / 2;
+        // Center the graph - we need the absolute width of the SVG here, not 100%
+        //var xCenterOffset = (svg.attr("width") - graph.graph().width) / 2;
+        var xCenterOffset = (document.querySelector("main").offsetWidth - 40 - graph.graph().width) / 2;
         inner.attr("transform", "translate(" + xCenterOffset + ", 20)");
+        // TODO: Remove height setting once pan-and-zoom implemented:
         svg.attr("height", graph.graph().height + 40);
     }
 
