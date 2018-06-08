@@ -91,13 +91,26 @@ class Tree {
         render(inner, graph);
 
         // Add event listeners to nodes:
-        inner.selectAll("g.node").on("click", Tree.selectNode);
+        svg.selectAll("g.node").on("click", Tree.selectNode);
         // Unselecting click:
         svg.on("click", () => {
-            inner.selectAll("g.node")
-                .classed("selected", false);
+            inner.selectAll("g.node").classed("selected", false);
             // Update Vue data:
             app.selectNone();
+        });
+
+        // Add handles to rendered nodes:
+        svg.selectAll("g.node").each((id, i) => {
+            var elem = graph.node(id).elem;
+            //console.log(i, id, elem);
+            // Add 2 connector handles:
+            var g = d3.select(elem).append("g");
+            g.classed("handles");
+            var h1 = g.append("text").text("add_box").style("transform", "translate(-6px,-27px)");
+            var h2 = g.append("text").text("add_box").style("transform", "translate(-6px,27px)");
+            // Add click handlers to handles:
+            h1.on('click', () => { d3.event.stopPropagation(); console.log(id, 'h1'); });
+            h2.on('click', () => { d3.event.stopPropagation(); console.log(id, 'h2'); });
         });
 
         // Center the graph - we need the absolute width of the SVG here, not 100%

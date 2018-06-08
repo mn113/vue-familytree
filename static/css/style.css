@@ -154,14 +154,21 @@ i:hover {
 .node text:hover {
 	color: red;
 }
-.edgePath path.path {
-	stroke: #333;
-	fill: none;
-	stroke-width: 1.5px;
+.node:hover rect {
+    stroke-width: 4px;
 }
 #dagre-svg .label p {
 	text-align: center;
 	font-weight: 300;
 	font-family: Roboto, sans-serf;
 	font-size: 14px;
+}
+.edgePath path.path {
+	stroke: #333;
+	fill: none;
+	stroke-width: 1.5px;
+}
+.handles text {
+    fill: black;
+    color: white;
 }
