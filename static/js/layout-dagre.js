@@ -100,7 +100,7 @@ class Tree {
         });
 
         // Add handles to rendered nodes:
-        svg.selectAll("g.node").each((id, i) => {
+        svg.selectAll("g.node").each(id => {
             var elem = graph.node(id).elem;
             //console.log(i, id, elem);
             // Add 2 connector handles:

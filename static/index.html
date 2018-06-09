@@ -24,8 +24,6 @@
 			<button onclick="app.newFamily()">Add Family</button>
 		</header>
 		<main>
-			<h2><input v-model="title"></input></h2>
-			<h4>by <input v-model="author"></input></h4>
 			<svg id="dagre-svg" width="100%" height="100%"></svg>
 		</main>
 		<aside>
@@ -42,7 +40,9 @@
 				</family>
 				<span v-else>Invalid selection.</span>
 			</div>
-			<span v-else>Nothing selected.</span>
+			<div v-else>
+                <tree-stats :individuals="individuals" :title="title" :author="author"></tree-stats>
+            </div>
 				<hr>
 			<i>content_cut</i>
 			<i>add</i>
@@ -87,7 +87,8 @@
 	<!--script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.2.12/cytoscape.min.js"></script>
 	<script src="https://unpkg.com/dagre@0.8.2/dist/dagre.js"></script>
 	<script src="js/3rdparty/cytoscape-dagre.js"></script-->
-	<script src="js/components/treeNode.js"></script>
+    <script src="js/components/treeStats.js"></script>
+    <script src="js/components/treeNode.js"></script>
 	<script src="js/components/individual.js"></script>
 	<script src="js/components/family.js"></script>
 	<script src="js/components/personLine.js"></script>
