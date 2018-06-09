@@ -147,15 +147,8 @@ i:hover {
 	stroke: red;
 	stroke-width: 2.5px;
 }
-.node text {
-	font-family: "Material Icons";
-	cursor: pointer;
-}
-.node text:hover {
-	color: red;
-}
 .node:hover rect {
-    stroke-width: 4px;
+    xstroke-width: 4px;
 }
 #dagre-svg .label p {
 	text-align: center;
@@ -169,6 +162,14 @@ i:hover {
 	stroke-width: 1.5px;
 }
 .handles text {
-    fill: black;
+    fill: #ccc;
     color: white;
+	font-family: "Material Icons";
+	cursor: pointer;
+}
+.handles text:hover {
+    fill: red;
+}
+.handles text.active {
+	fill: purple;
 }

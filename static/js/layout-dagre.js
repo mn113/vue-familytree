@@ -12,6 +12,8 @@ graph.setDefaultEdgeLabel(() => {});
 var svg = d3.select("svg"),
     inner = svg.append("g");
 
+var activeHandle = null; // tracks last clicked node handle
+
 class Tree {
     // Add or update a node and its label in the graph:
     static addIndividualNode(node) {
@@ -95,23 +97,13 @@ class Tree {
         // Unselecting click:
         svg.on("click", () => {
             inner.selectAll("g.node").classed("selected", false);
+            inner.selectAll("text").classed("active", false);
+            activeHandle = null;
             // Update Vue data:
             app.selectNone();
         });
 
-        // Add handles to rendered nodes:
-        svg.selectAll("g.node").each(id => {
-            var elem = graph.node(id).elem;
-            //console.log(i, id, elem);
-            // Add 2 connector handles:
-            var g = d3.select(elem).append("g");
-            g.classed("handles");
-            var h1 = g.append("text").text("add_box").style("transform", "translate(-6px,-27px)");
-            var h2 = g.append("text").text("add_box").style("transform", "translate(-6px,27px)");
-            // Add click handlers to handles:
-            h1.on('click', () => { d3.event.stopPropagation(); console.log(id, 'h1'); });
-            h2.on('click', () => { d3.event.stopPropagation(); console.log(id, 'h2'); });
-        });
+        Tree.addHandlesToNodes();
 
         // Center the graph - we need the absolute width of the SVG here, not 100%
         //var xCenterOffset = (svg.attr("width") - graph.graph().width) / 2;
@@ -119,6 +111,67 @@ class Tree {
         inner.attr("transform", "translate(" + xCenterOffset + ", 20)");
         // TODO: Remove height setting once pan-and-zoom implemented:
         svg.attr("height", graph.graph().height + 40);
+    }
+
+    static addHandlesToNodes() {
+        // Add handles to rendered nodes:
+        svg.selectAll("g.node").each(nodeId => {
+            var node = graph.node(nodeId);
+            var type = app.$data.nodes.filter(n => n.id === nodeId)[0].type;
+
+            // Add 2 connector handles:
+            var handlesGroup = d3.select(node.elem).append("g");
+            handlesGroup.classed("handles", true);
+            var handleTop = handlesGroup.append("text").text("add_box").style("transform", `translate(-6px, ${-0.5 * node.height - 8}px)`);
+            var handleBot = handlesGroup.append("text").text("add_box").style("transform", `translate(-6px, ${0.5 * node.height + 24}px)`);
+
+            // Add click handlers to handles:
+            handleTop.on('click', () => {
+                d3.event.stopPropagation();
+                inner.selectAll("text").classed("active", false);
+                handleTop.classed("active", true);
+                Tree.tryConnection([nodeId, 'top', type]);
+            });
+            handleBot.on('click', () => {
+                d3.event.stopPropagation();
+                inner.selectAll("text").classed("active", false);
+                handleBot.classed("active", true);
+                Tree.tryConnection([nodeId, 'bot', type]);
+            });
+        });
+    }
+
+    static tryConnection(clickedHandle) {
+        // Needs to be different nodes and different handles:
+        if (activeHandle
+            && activeHandle[0] !== clickedHandle[0]
+            && activeHandle[1] !== clickedHandle[1]) {
+            // Make a connection:
+            console.log("Trying connection", activeHandle, clickedHandle);
+            // If person bottom to family top, person becomes family parent
+            if (clickedHandle[2] === 'FAM' && clickedHandle[1] === 'top') {
+                console.log("person", activeHandle[0], "heads family", clickedHandle[0]);
+            }
+            else if (clickedHandle[2] === 'INDI' && clickedHandle[1] === 'bot') {
+                console.log("person", clickedHandle[0], "heads family", activeHandle[0]);
+            }
+            // If person top to family bottom, person becomes family child
+            else if (clickedHandle[2] === 'FAM' && clickedHandle[1] === 'bot') {
+                console.log("person", activeHandle[0], "born into family", clickedHandle[0]);
+            }
+            else if (clickedHandle[2] === 'INDI' && clickedHandle[1] === 'top') {
+                console.log("person", clickedHandle[0], "born into family", activeHandle[0]);
+            }
+            // If 2 person nodes, ask to create new family or add to existing?
+            else if (clickedHandle[2] === 'INDI' && activeHandle[2] === 'INDI') {
+                console.log("We want to join 2 individuals directly.");
+            }
+            activeHandle = null;
+            inner.selectAll("text").classed("active", false);            
+        }
+        else {
+            activeHandle = clickedHandle;
+        }
     }
 
     static redraw() {
