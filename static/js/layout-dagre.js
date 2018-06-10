@@ -49,6 +49,7 @@ class Tree {
         graph.setEdge(source, target, {
             curve: d3.curveBasis,
             labelType: 'html',
+            labelPos: 'c',
             label: `<i source=${source} target=${target}>content_cut</i>`
         });
     }
@@ -114,6 +115,10 @@ class Tree {
         inner.attr("transform", "translate(" + xCenterOffset + ", 20)");
         // TODO: Remove height setting once pan-and-zoom implemented:
         svg.attr("height", graph.graph().height + 40);
+
+        svg.call(d3.zoom().on("zoom", () => {
+            inner.attr("transform", d3.event.transform);
+        }));
     }
 
     static addHandlesToNodes() {

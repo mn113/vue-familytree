@@ -45,7 +45,7 @@ Vue.component('individual', {
 
         isDisconnected() {
             return this.data.famsHeadOf.length === 0 && this.data.famsChildOf.length === 0;
-        }
+        },
 
         parents() {
             // Get family above me, resolve its parents as Objects:
