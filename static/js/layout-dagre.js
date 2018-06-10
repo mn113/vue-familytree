@@ -125,13 +125,16 @@ class Tree {
         // Add handles to rendered nodes:
         svg.selectAll("g.node").each(nodeId => {
             var node = graph.node(nodeId);
-            var type = app.$data.nodes.filter(n => n.id === nodeId)[0].type;
+            var type;
+            if (app.individuals.filter(n => n.id === nodeId).length > 0) type = 'INDI';
+            else if (app.families.filter(n => n.id === nodeId).length > 0) type = 'FAM';
 
             // Add 2 connector handles:
             var handlesGroup = d3.select(node.elem).append("g");
             handlesGroup.classed("handles", true);
             var handleTop = handlesGroup.append("text").text("add_box").style("transform", `translate(-6px, ${-0.5 * node.height - 8}px)`);
             var handleBot = handlesGroup.append("text").text("add_box").style("transform", `translate(-6px, ${0.5 * node.height + 24}px)`);
+            var handleCentre = handlesGroup.append("text").text("delete").style("transform", `translate(${0.5 * node.width}px, ${0.5 * node.height}px)`);
 
             // Add click handlers to handles:
             handleTop.on('click', () => {
@@ -145,6 +148,10 @@ class Tree {
                 inner.selectAll("text").classed("active", false);
                 handleBot.classed("active", true);
                 Tree.tryConnection([nodeId, 'bot', type]);
+            });
+            handleCentre.on('click', () => {
+                d3.event.stopPropagation();
+                Tree.deleteNode({id: nodeId, type});
             });
         });
     }
@@ -256,6 +263,26 @@ class Tree {
         console.log(app.$data.links.length);
         app.$data.links = app.$data.links.filter(e => e.source !== source || e.target !== target);
         console.log(app.$data.links.length);
+        Tree.redraw();
+    }
+
+    static deleteNode(node) {
+        // Break all connections:
+        for (var link of app.$data.links) {
+            if (link.source === node.id || link.target === node.id) {
+                Tree.breakConnection(link.source, link.target);
+            }
+        }
+        // Remove from Vue:
+        if (node.type === 'FAM') {
+            app.$data.families = app.$data.families.filter(f => f.id !== node.id);
+        }
+        else if (node.type === 'INDI') {
+            app.$data.individuals = app.$data.individuals.filter(p => p.id !== node.id);
+        }
+        // Remove from dagre graph:
+        graph.removeNode(node.id);
+
         Tree.redraw();
     }
 

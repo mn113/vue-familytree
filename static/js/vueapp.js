@@ -7,7 +7,7 @@ var app = new Vue({ // eslint-disable-line no-unused-vars
         author: "Martin",
         individuals: [],
         families: [],
-        nodes: [],	// TODO: choose one or other
+        //nodes: [],	// TODO: choose one or other
         links: [],
         selectedNode: null,
         fileToUpload: ""
@@ -15,12 +15,17 @@ var app = new Vue({ // eslint-disable-line no-unused-vars
     mounted() {
         this.fetchTreeData();
     },
+    computed: {
+        nodes() {
+            return this.data.individuals.concat(this.data.families);
+        }
+    },
     methods: {
         fetchTreeData() {
             axios.get('/treedata')
                 .then(response => {
                     console.log(response);
-                    this.nodes = response.data.nodes;
+                    //this.nodes = response.data.nodes;
                     this.individuals = response.data.nodes.filter(n => n.type === "INDI");
                     this.families = response.data.nodes.filter(n => n.type === "FAM");
                     this.links = response.data.links;
@@ -79,9 +84,8 @@ var app = new Vue({ // eslint-disable-line no-unused-vars
             var i = new Individual();
             console.log("Created i:", i);
             this.individuals.push(i);
-            this.nodes.push(i);
+            //this.nodes.push(i);
             Tree.addIndividualNode(i);
-            //Tree.clearGraph();
             Tree.layoutAndRender();
         },
 
@@ -89,16 +93,15 @@ var app = new Vue({ // eslint-disable-line no-unused-vars
             var f = new Family();
             console.log("Created f:", f);
             this.families.push(f);
-            this.nodes.push(f);
+            //this.nodes.push(f);
             Tree.addFamilyNode(f);
-            //Tree.clearGraph();
             Tree.layoutAndRender();
         },
 
         newLink(source, target) {
-            this.links.push({});
+            console.log("Created link:", source, '->', target);
+            this.links.push({source, target});
             Tree.addEdge(source, target);
-            //Tree.clearGraph();
             Tree.layoutAndRender();
         }
     },
@@ -116,10 +119,12 @@ class Individual {
         return {
             id: "i_" + INDI_ID++,
             type: "INDI",
-            fname: "",
-            lname: "",
+            fname: "New",
+            lname: "Person",
             sex: "unknown",
-            events: []
+            events: [],
+            famsHeadOf: [],
+            famsChildOf: []
         };
     }
 }
@@ -129,11 +134,10 @@ class Family {
         return {
             id: 'f_' + FAM_ID++,
             type: "FAM",
-            husb: "",
-            wife: "",
-            children: [],
-            married: "",
-            events: []
+            married: "unknown",
+            events: [],
+            parents: [],
+            children: []
         };
     }
 }
