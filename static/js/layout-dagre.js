@@ -142,32 +142,68 @@ class Tree {
     }
 
     static tryConnection(clickedHandle) {
+        var person1,
+            person2,
+            family;
         // Needs to be different nodes and different handles:
         if (activeHandle
             && activeHandle[0] !== clickedHandle[0]
             && activeHandle[1] !== clickedHandle[1]) {
             // Make a connection:
-            console.log("Trying connection", activeHandle, clickedHandle);
-            // If person bottom to family top, person becomes family parent
-            if (clickedHandle[2] === 'FAM' && clickedHandle[1] === 'top') {
-                console.log("person", activeHandle[0], "heads family", clickedHandle[0]);
+            // 0. If 2 family nodes, ignore:
+            if (clickedHandle[2] === 'FAM' && activeHandle[2] === 'FAM') {
+                console.log("Can't join 2 families");
             }
-            else if (clickedHandle[2] === 'INDI' && clickedHandle[1] === 'bot') {
-                console.log("person", clickedHandle[0], "heads family", activeHandle[0]);
-            }
-            // If person top to family bottom, person becomes family child
-            else if (clickedHandle[2] === 'FAM' && clickedHandle[1] === 'bot') {
-                console.log("person", activeHandle[0], "born into family", clickedHandle[0]);
-            }
-            else if (clickedHandle[2] === 'INDI' && clickedHandle[1] === 'top') {
-                console.log("person", clickedHandle[0], "born into family", activeHandle[0]);
-            }
-            // If 2 person nodes, ask to create new family or add to existing?
+            // 1. If 2 person nodes, ask to create new family or add to existing?
             else if (clickedHandle[2] === 'INDI' && activeHandle[2] === 'INDI') {
+                person1 = app.getIndividualById(activeHandle[0]);
+                person2 = app.getIndividualById(clickedHandle[0]);
                 console.log("We want to join 2 individuals directly.");
+                alert("Individuals cannot be joined directly without creating a family first.");
             }
+            // 2. Person bottom to family top => person becomes a family parent
+            else if (clickedHandle[2] === 'FAM' && clickedHandle[1] === 'top') {
+                //console.log("person", activeHandle[0], "heads family", clickedHandle[0]);
+                person1 = app.getIndividualById(activeHandle[0]);
+                family = app.getFamilyById(clickedHandle[0]);
+                person1.famsHeadOf.push(family.id);
+                family.parents.push(person1.id);
+                app.$data.links.push({source: person1.id, target: family.id});
+                Tree.redraw();
+            }
+            // 3. Same as case 2, order reversed
+            else if (clickedHandle[2] === 'INDI' && clickedHandle[1] === 'bot') {
+                //console.log("person", clickedHandle[0], "heads family", activeHandle[0]);
+                person1 = app.getIndividualById(clickedHandle[0]);
+                family = app.getFamilyById(activeHandle[0]);
+                person1.famsHeadOf.push(family.id);
+                family.parents.push(person1.id);
+                app.$data.links.push({source: person1.id, target: family.id});
+                Tree.redraw();
+            }
+            // 4. Person top to family bottom => person becomes a family child
+            else if (clickedHandle[2] === 'FAM' && clickedHandle[1] === 'bot') {
+                //console.log("person", activeHandle[0], "born into family", clickedHandle[0]);
+                person1 = app.getIndividualById(activeHandle[0]);
+                family = app.getFamilyById(clickedHandle[0]);
+                person1.famsChildOf.push(family.id);
+                family.children.push(person1.id);
+                app.$data.links.push({source: family.id, target: person1.id});
+                Tree.redraw();
+            }
+            // 5. Same as case 4, order reversed
+            else if (clickedHandle[2] === 'INDI' && clickedHandle[1] === 'top') {
+                //console.log("person", clickedHandle[0], "born into family", activeHandle[0]);
+                person1 = app.getIndividualById(clickedHandle[0]);
+                family = app.getFamilyById(activeHandle[0]);
+                person1.famsChildOf.push(family.id);
+                family.children.push(person1.id);
+                app.$data.links.push({source: family.id, target: person1.id});
+                Tree.redraw();
+            }
+            // Deselect:
             activeHandle = null;
-            inner.selectAll("text").classed("active", false);            
+            inner.selectAll("text").classed("active", false);
         }
         else {
             activeHandle = clickedHandle;
@@ -178,11 +214,12 @@ class Tree {
         console.info("Redrawing.");
         Tree.rebuildGraph();
         Tree.layoutAndRender();
-        Tree.selectNode(app.selectedNode.id);
+        if (app.selectedNode) Tree.selectNode(app.selectedNode.id);
     }
 
     static selectNode(id) {
         if (d3.event !== null) d3.event.stopPropagation();
+        if (!app.selectedNode) return;
         console.log("Node", id, "selected");
         inner.selectAll("g.node")
             .classed("selected", (n => n === id)); // set matching one selected
