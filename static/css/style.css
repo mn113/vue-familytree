@@ -156,11 +156,6 @@ i:hover {
 	font-family: Roboto, sans-serf;
 	font-size: 14px;
 }
-.edgePath path.path {
-	stroke: #333;
-	fill: none;
-	stroke-width: 1.5px;
-}
 .handles text {
     fill: #ccc;
     color: white;
@@ -172,4 +167,17 @@ i:hover {
 }
 .handles text.active {
 	fill: purple;
+}
+.edgePath path.path {
+	stroke: #333;
+	fill: none;
+	stroke-width: 1.5px;
+}
+.edgeLabel i {
+    color: black;
+	font-family: "Material Icons";
+	cursor: pointer;
+}
+.edgeLabel i:hover {
+    color: red;
 }

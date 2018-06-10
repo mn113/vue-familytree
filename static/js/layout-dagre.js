@@ -4,9 +4,7 @@
 var graph = new dagreD3.graphlib.Graph();
 // Set an object for the graph label
 graph.setGraph({});
-// Default to assigning a new object as a label for each new edge.
-graph.setDefaultNodeLabel(() => {});
-graph.setDefaultEdgeLabel(() => {});
+graph.setDefaultNodeLabel(() => {});    // New Person/Family or somesuch label?
 
 // Set up an SVG group so that we can translate the final graph.
 var svg = d3.select("svg"),
@@ -48,7 +46,11 @@ class Tree {
 
     // Add or update an edge in the graph:
     static addEdge(source, target) {
-        graph.setEdge(source, target, { curve: d3.curveBasis });
+        graph.setEdge(source, target, {
+            curve: d3.curveBasis,
+            labelType: 'html',
+            label: `<i source=${source} target=${target}>content_cut</i>`
+        });
     }
 
     // Batch add all the Vue nodes to the graph:
@@ -104,6 +106,7 @@ class Tree {
         });
 
         Tree.addHandlesToNodes();
+        Tree.addHandlesToEdges();
 
         // Center the graph - we need the absolute width of the SVG here, not 100%
         //var xCenterOffset = (svg.attr("width") - graph.graph().width) / 2;
@@ -137,6 +140,17 @@ class Tree {
                 inner.selectAll("text").classed("active", false);
                 handleBot.classed("active", true);
                 Tree.tryConnection([nodeId, 'bot', type]);
+            });
+        });
+    }
+
+    static addHandlesToEdges() {
+        // Add handles to rendered edge labels: TODO: use paths
+        document.querySelectorAll("g.edgeLabel i").forEach(elem => {
+            // I need the elem & its attributes
+            elem = d3.select(elem);
+            elem.on('click', () => {
+                Tree.breakConnection(elem.attr('source'), elem.attr('target'));
             });
         });
     }
@@ -208,6 +222,36 @@ class Tree {
         else {
             activeHandle = clickedHandle;
         }
+    }
+
+    static breakConnection(source, target) {
+        var person,
+            family;
+        console.log("Breaking link", source, target);
+        // If person above family, de-parent both:
+        person = app.getIndividualById(source);
+        if (person) {
+            family = app.getFamilyById(target);
+            person.famsHeadOf = person.famsHeadOf.filter(f => f !== target);
+            family.parents = family.parents.filter(p => p !== source);
+        }
+        // If person below family, de-child both:
+        else {
+            person = app.getIndividualById(target);
+            family = app.getFamilyById(source);
+            person.famsChildOf = person.famsChildOf.filter(p => p !== source);
+            family.children = family.children.filter(f => f !== target);
+        }
+        console.log("Unlinked", person, family);
+
+        // Remove from dagre graph:
+        graph.removeEdge(source, target);
+
+        // Finally, remove the single unique link from Vue:
+        console.log(app.$data.links.length);
+        app.$data.links = app.$data.links.filter(e => e.source !== source || e.target !== target);
+        console.log(app.$data.links.length);
+        Tree.redraw();
     }
 
     static redraw() {
