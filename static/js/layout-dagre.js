@@ -57,18 +57,18 @@ class Tree {
     // Batch add all the Vue nodes to the graph:
     static addAllNodes() {
         // Individuals:
-        for (var indiNode of app.individuals) {
+        for (var indiNode of app.tree.individuals) {
             Tree.addIndividualNode(indiNode);
         }
         // Families:
-        for (var famNode of app.families) {
+        for (var famNode of app.tree.families) {
             Tree.addFamilyNode(famNode);
         }
     }
 
     // Batch add all the Vue edges to the graph:
     static addAllEdges() {
-        for (var link of app.links) {
+        for (var link of app.tree.links) {
             Tree.addEdge(link.source, link.target);
         }
     }
@@ -96,9 +96,10 @@ class Tree {
         render(inner, graph);
 
         // Add event listeners to nodes:
-        svg.selectAll("g.node").on("click", Tree.selectNode);
+        inner.selectAll("g.node").on("click", Tree.selectNode);
         // Unselecting click:
         svg.on("click", () => {
+            console.log("click!");
             inner.selectAll("g.node").classed("selected", false);
             inner.selectAll("text").classed("active", false);
             activeHandle = null;
@@ -126,8 +127,8 @@ class Tree {
         svg.selectAll("g.node").each(nodeId => {
             var node = graph.node(nodeId);
             var type;
-            if (app.individuals.filter(n => n.id === nodeId).length > 0) type = 'INDI';
-            else if (app.families.filter(n => n.id === nodeId).length > 0) type = 'FAM';
+            if (app.tree.individuals.filter(n => n.id === nodeId).length > 0) type = 'INDI';
+            else if (app.tree.families.filter(n => n.id === nodeId).length > 0) type = 'FAM';
 
             // Add 2 connector handles:
             var handlesGroup = d3.select(node.elem).append("g");
@@ -194,7 +195,7 @@ class Tree {
                 family = app.getFamilyById(clickedHandle[0]);
                 person1.famsHeadOf.push(family.id);
                 family.parents.push(person1.id);
-                app.$data.links.push({source: person1.id, target: family.id});
+                app.$data.tree.links.push({source: person1.id, target: family.id});
                 Tree.redraw();
             }
             // 3. Same as case 2, order reversed
@@ -204,7 +205,7 @@ class Tree {
                 family = app.getFamilyById(activeHandle[0]);
                 person1.famsHeadOf.push(family.id);
                 family.parents.push(person1.id);
-                app.$data.links.push({source: person1.id, target: family.id});
+                app.$data.tree.links.push({source: person1.id, target: family.id});
                 Tree.redraw();
             }
             // 4. Person top to family bottom => person becomes a family child
@@ -214,7 +215,7 @@ class Tree {
                 family = app.getFamilyById(clickedHandle[0]);
                 person1.famsChildOf.push(family.id);
                 family.children.push(person1.id);
-                app.$data.links.push({source: family.id, target: person1.id});
+                app.$data.tree.links.push({source: family.id, target: person1.id});
                 Tree.redraw();
             }
             // 5. Same as case 4, order reversed
@@ -224,7 +225,7 @@ class Tree {
                 family = app.getFamilyById(activeHandle[0]);
                 person1.famsChildOf.push(family.id);
                 family.children.push(person1.id);
-                app.$data.links.push({source: family.id, target: person1.id});
+                app.$data.tree.links.push({source: family.id, target: person1.id});
                 Tree.redraw();
             }
             // Deselect:
@@ -260,25 +261,25 @@ class Tree {
         graph.removeEdge(source, target);
 
         // Finally, remove the single unique link from Vue:
-        console.log(app.$data.links.length);
-        app.$data.links = app.$data.links.filter(e => e.source !== source || e.target !== target);
-        console.log(app.$data.links.length);
+        console.log(app.$data.tree.links.length);
+        app.$data.tree.links = app.$data.tree.links.filter(e => e.source !== source || e.target !== target);
+        console.log(app.$data.tree.links.length);
         Tree.redraw();
     }
 
     static deleteNode(node) {
         // Break all connections:
-        for (var link of app.$data.links) {
+        for (var link of app.$data.tree.links) {
             if (link.source === node.id || link.target === node.id) {
                 Tree.breakConnection(link.source, link.target);
             }
         }
         // Remove from Vue:
         if (node.type === 'FAM') {
-            app.$data.families = app.$data.families.filter(f => f.id !== node.id);
+            app.$data.tree.families = app.$data.tree.families.filter(f => f.id !== node.id);
         }
         else if (node.type === 'INDI') {
-            app.$data.individuals = app.$data.individuals.filter(p => p.id !== node.id);
+            app.$data.tree.individuals = app.$data.tree.individuals.filter(p => p.id !== node.id);
         }
         // Remove from dagre graph:
         graph.removeNode(node.id);
@@ -293,13 +294,16 @@ class Tree {
         if (app.selectedNode) Tree.selectNode(app.selectedNode.id);
     }
 
-    static selectNode(id) {
+    // Select (in graph and sidebar) either the node with the passed id, or the last selected:
+    static selectNode(id = null) {
+        if (!id) console.log("No id");
+        if (!app.selectedNode) console.log("No app.selectedNode");
+        if (!app.selectedNode && !id) return;
         if (d3.event !== null) d3.event.stopPropagation();
-        if (!app.selectedNode) return;
-        console.log("Node", id, "selected");
         inner.selectAll("g.node")
             .classed("selected", (n => n === id)); // set matching one selected
         // Update Vue data:
         app.selectNodeById(id);
+        console.log("Node", id, "selected");
     }
 }

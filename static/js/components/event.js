@@ -29,9 +29,6 @@ Vue.component('event', {
         eventTypes() {
             if (this.parentType === 'INDI') return ['Birth', 'Christening', 'Baptism', 'Death', 'Burial', 'Cremation'];
             else if (this.parentType === 'FAM') return ['Marriage', 'Divorce'];
-        },
-        placeList() {
-            return app.placeList;
         }
     },
     template: `
@@ -43,26 +40,28 @@ Vue.component('event', {
                 <option v-for="type in eventTypes">{{ type }}</option>
             </select>
 
-            <label for="date">Date</label>
+            <vs-input
+                vs-label-placeholder="Date"
+                style="width:5.5em"
+                name="date"
+                ref="date"
+                :value="fulldate"
+                @blur="updateEvent"/>
+            <!--label for="date">Date</label>
             <input
                 style="width:5.5em"
                 name="date"
                 ref="date"
                 :value="fulldate"
-                @blur="updateEvent">
+                @blur="updateEvent"-->
 
             <label for="place">Place</label>
-            <v-autocomplete
+            <input
                 style="width:7em"
                 name="place"
                 ref="place"
                 :value="event.place"
-                @blur="updateEvent"
-                :items="placeList"
-                :get-label="getLabel"
-                :component-item='template'
-                @update-items="updateItems">
-            </v-autocomplete>
+                @blur="updateEvent">
 
             <button @click="deleteEvent"><i>delete</i></button>
         </div>

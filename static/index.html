@@ -6,23 +6,25 @@
 	<title>Tree45</title>
 	<link rel="stylesheet" href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons'>
 	<link rel="stylesheet" href="https://unpkg.com/normalize.css@8.0.0/normalize.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vuesax/dist/vuesax.css">
 	<link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="https://unpkg.com/v-autocomplete@1.8.2/dist/v-autocomplete.css"></link>
+    <!--link rel="stylesheet" href="https://unpkg.com/v-autocomplete@1.8.2/dist/v-autocomplete.css"></link-->
 	<link rel="shortcut icon" href="favicon.ico">
 
 </head>
 <body>
-	<div  id="app" class="layout-grid">
+	<div id="app" class="layout-grid">
 		<header>
 			<h1>Family Tree Editor</h1>
 			<form>
 				<label>Choose a GEDCOM file:
 					<input type="file" id="file" ref="file" @change="storeFormFile()"/>
 				</label>
-				<button @click="submitForm()">Upload</button>
+				<vs-button @click="submitForm()">Upload</vs-button>
 		    </form>
-			<button onclick="app.newIndividual()">Add Person</button>
-			<button onclick="app.newFamily()">Add Family</button>
+			<vs-button vs-type="primary-filled" @click="app.newIndividual()">Add Person</vs-button>
+            <vs-button vs-type="primary-filled" @click="app.newFamily()">Add Family</vs-button>
+			<!--button onclick="app.newFamily()">Add Family</button-->
 		</header>
 		<main>
 			<svg id="dagre-svg" width="100%" height="100%"></svg>
@@ -42,7 +44,7 @@
 				<span v-else>Invalid selection.</span>
 			</div>
 			<div v-else>
-                <tree-stats :individuals="individuals" :title="title" :author="author"></tree-stats>
+                <tree-stats :individuals="tree.individuals" :title="meta.title" :author="meta.author"></tree-stats>
             </div>
 				<hr>
 			<i>content_cut</i>
@@ -82,6 +84,7 @@
 	</div>
 	<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 	<script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vuesax/dist/vuesax.min.js"></script>
 	<script src="https://d3js.org/d3.v4.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/dagre/0.8.2/dagre.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/dagre-d3/0.6.1/dagre-d3.min.js"></script>
@@ -96,9 +99,9 @@
 	<script src="js/components/event.js"></script>
 	<script src="js/vueapp.js"></script>
     <script src="js/layout-dagre.js"></script>
-	<script src="https://unpkg.com/v-autocomplete@1.8.2/dist/v-autocomplete.js"></script>
+	<!--script src="https://unpkg.com/v-autocomplete@1.8.2/dist/v-autocomplete.js"></script-->
 	<script>
-    Vue.use(VAutocomplete.default);
+    //Vue.use(VAutocomplete.default);
 	const gedcom2en = {
 		"BIRT": "birth",
 		"BAPM": "baptism",

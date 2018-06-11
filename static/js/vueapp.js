@@ -3,12 +3,15 @@
 var app = new Vue({ // eslint-disable-line no-unused-vars
     el: '#app',
     data: {
-        title: "Default tree",
-        author: "Martin",
-        individuals: [],
-        families: [],
-        //nodes: [],	// TODO: choose one or other
-        links: [],
+        meta: {
+            title: "Default tree",
+            author: "Martin"
+        },
+        tree: {
+            individuals: [],
+            families: [],
+            links: []
+        },
         selectedNode: null,
         fileToUpload: ""
     },
@@ -17,7 +20,7 @@ var app = new Vue({ // eslint-disable-line no-unused-vars
     },
     computed: {
         nodes() {
-            return this.data.individuals.concat(this.data.families);
+            return this.tree.individuals.concat(this.tree.families);
         },
 
         placeList() {
@@ -36,9 +39,9 @@ var app = new Vue({ // eslint-disable-line no-unused-vars
                 .then(response => {
                     console.log(response);
                     //this.nodes = response.data.nodes;
-                    this.individuals = response.data.nodes.filter(n => n.type === "INDI");
-                    this.families = response.data.nodes.filter(n => n.type === "FAM");
-                    this.links = response.data.links;
+                    this.tree.individuals = response.data.nodes.filter(n => n.type === "INDI");
+                    this.tree.families = response.data.nodes.filter(n => n.type === "FAM");
+                    this.tree.links = response.data.links;
                     // Now we can graph:
                     Tree.addAllNodes();
                     Tree.addAllEdges();
@@ -72,7 +75,7 @@ var app = new Vue({ // eslint-disable-line no-unused-vars
         },
 
         selectNodeById(id) {
-            var matched = this.individuals.concat(this.families).filter(n => n.id === id);
+            var matched = this.nodes.filter(n => n.id === id);
             if (matched.length > 0) this.selectedNode = matched[0];
         },
 
@@ -81,31 +84,31 @@ var app = new Vue({ // eslint-disable-line no-unused-vars
         },
 
         getFamilyById(id) {
-            var matched = this.families.filter(n => n.id === id);
+            var matched = this.tree.families.filter(n => n.id === id);
             return (matched.length > 0) ? matched[0] : null;
         },
 
         getIndividualById(id) {
-            var matched = this.individuals.filter(n => n.id === id);
+            var matched = this.tree.individuals.filter(n => n.id === id);
             return (matched.length > 0) ? matched[0] : null;
         },
 
         newIndividual() {
             var i = new Individual();
             console.log("Created i:", i);
-            this.individuals.push(i);
-            //this.nodes.push(i);
+            this.tree.individuals.push(i);
             Tree.addIndividualNode(i);
             Tree.layoutAndRender();
+            Tree.selectNode(i.id);
         },
 
         newFamily() {
             var f = new Family();
             console.log("Created f:", f);
             this.families.push(f);
-            //this.nodes.push(f);
             Tree.addFamilyNode(f);
             Tree.layoutAndRender();
+            Tree.selectNode(f.id);
         },
 
         newLink(source, target) {
@@ -114,8 +117,6 @@ var app = new Vue({ // eslint-disable-line no-unused-vars
             Tree.addEdge(source, target);
             Tree.layoutAndRender();
         }
-    },
-    computed: {
     }
 });
 
