@@ -18,6 +18,16 @@ var app = new Vue({ // eslint-disable-line no-unused-vars
     computed: {
         nodes() {
             return this.data.individuals.concat(this.data.families);
+        },
+
+        placeList() {
+            var list = new Set();
+            for (var n of this.nodes) {
+                for (var e of n.events) {
+                    if (e.place && e.place.length > 0) list.add(e.place);
+                }
+            }
+            return list;
         }
     },
     methods: {
@@ -62,7 +72,7 @@ var app = new Vue({ // eslint-disable-line no-unused-vars
         },
 
         selectNodeById(id) {
-            var matched = this.nodes.filter(n => n.id === id);
+            var matched = this.individuals.concat(this.families).filter(n => n.id === id);
             if (matched.length > 0) this.selectedNode = matched[0];
         },
 
