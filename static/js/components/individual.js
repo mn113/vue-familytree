@@ -39,6 +39,14 @@ Vue.component('individual', {
         }
     },
     computed: {
+        sexOptions() {
+            return [
+                {text: 'Male', value: 'M'},
+                {text: 'Female', value: 'F'},
+                {text: 'Unknown', value: 'unknown'}
+            ];
+        },
+
         symbol() {
             return this.data.sex === 'M' ? '♂' : this.data.sex === 'F' ? '♀' : '';
         },
@@ -89,34 +97,23 @@ Vue.component('individual', {
             <h3>Names</h3>
 
             <div>
-                <label>First name(s)</label>
-                <input
-                    name="fname"
-                    label="First"
+                <vs-input
+                    vs-label-placeholder="First"
                     ref="fname"
-                    v-model="data.fname">
-                </input>
-            </div>
+                    v-model="data.fname"/>
 
-            <div>
-                <label>Last name(s)</label>
-                <input
-                    name="lname"
-                    label="Last"
+                <vs-input
+                    vs-label-placeholder="Last"
                     ref="lname"
-                    v-model="data.lname">
-                </input>
+                    v-model="data.lname"/>
             </div>
 
-            <label for="sex">Sex</label>
-            <select
-                name="sex"
+            <vs-select
+                label="Sex"
                 ref="sex"
-                v-model="data.sex">
-                <option>M</option>
-                <option>F</option>
-                <option>unknown</option>
-            </select>
+                v-model="data.sex"
+                :options="sexOptions">
+            </vs-select>
 
             <h3>Events <span>({{ data.events.length }})</span></h3>
 
@@ -130,7 +127,12 @@ Vue.component('individual', {
                     @delete="deleteEvent(event.id)">
                 </event>
 
-                <button @click="addEvent()" class="right"><i>add</i>Add Event</button>
+                <vs-button
+                    vs-type="primary-filled"
+                    @click="addEvent()"
+                    class="right"
+                    vs-icon="add">Add Event
+                </vs-button>
             </div>
         </div>
 

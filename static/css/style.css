@@ -99,6 +99,9 @@ i:hover {
 .personLine span {
 	font-size: 0.8em;
 }
+.event > div {
+    display: flex;
+}
 
 
 /********/

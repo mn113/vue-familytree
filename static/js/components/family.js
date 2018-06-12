@@ -36,14 +36,12 @@ Vue.component('family', {
             <i class="right" @click="update">close</i>
             <i class="right" @click="toggleEdit">save</i>
 
-            <label for="married">Married?</label>
-            <select
+            <vs-select
+                label="Status"
                 name="married"
                 ref="married"
-                v-model="data.married">
-                <option>Married</option>
-                <option>Unmarried</option>
-                <option>Unknown</option>
+                v-model="data.married"
+                :options="['Married','Unmarried','Divorced','Unknown']">
             </select>
 
             <h3>Parents <span>({{ data.parents.length }})</span></h3>

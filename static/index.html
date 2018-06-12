@@ -24,7 +24,6 @@
 		    </form>
 			<vs-button vs-type="primary-filled" @click="app.newIndividual()">Add Person</vs-button>
             <vs-button vs-type="primary-filled" @click="app.newFamily()">Add Family</vs-button>
-			<!--button onclick="app.newFamily()">Add Family</button-->
 		</header>
 		<main>
 			<svg id="dagre-svg" width="100%" height="100%"></svg>
@@ -81,10 +80,11 @@
 		<footer>
 			<p>&copy; {{ new Date().getFullYear() }}</p>
 		</footer>
-	</div>
+	</div><!-- #app end-->
+
 	<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 	<script src="https://unpkg.com/vue/dist/vue.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/vuesax/dist/vuesax.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vuesax/dist/vuesax.umd.js"></script>
 	<script src="https://d3js.org/d3.v4.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/dagre/0.8.2/dagre.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/dagre-d3/0.6.1/dagre-d3.min.js"></script>

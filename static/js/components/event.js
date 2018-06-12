@@ -1,10 +1,13 @@
-/* global fulldate, year */
+/* global fulldate, year, app */
 
 Vue.component('event', {
     props: {
         event: Object,
         parentType: String,
         editing: Boolean	// from parent
+    },
+    data() {
+        return {};
     },
     methods: {
         // Talk to parent:
@@ -27,43 +30,60 @@ Vue.component('event', {
             return year(this.event.date);
         },
         eventTypes() {
-            if (this.parentType === 'INDI') return ['Birth', 'Christening', 'Baptism', 'Death', 'Burial', 'Cremation'];
-            else if (this.parentType === 'FAM') return ['Marriage', 'Divorce'];
+            if (this.parentType === 'INDI') {
+                return [
+                    {value: 'BIRT', text: 'Birth', short: 'b.'},
+                    {value: 'CHR',  text: 'Christening', short: 'chr.'},
+                    {value: 'BAPM', text: 'Baptism', short: 'bap.'},
+                    {value: 'DEAT', text: 'Death', short: 'd.'},
+                    {value: 'BURI', text: 'Burial', short: 'bur.'},
+                    {value: 'CREM', text: 'Cremation', short: 'crem.'}
+                ];
+            }
+            else if (this.parentType === 'FAM') {
+                return [
+                    {value: 'MARR', text: 'Marriage', short: 'm.'},
+                    {value: 'DIV',  text: 'Divorce',  short: 'div.'}
+                ];
+            }
+        },
+        placeList() {
+            // Hopefully it has already been computed on the root instance...
+            return app.placeList.map(p => {
+                return {text: p, value: p};
+            }) || [];
         }
     },
     template: `
     <div class="event">
         <div v-show="editing">
-            <select
+            <vs-select
                 ref="type"
-                v-model="event.type">
-                <option v-for="type in eventTypes">{{ type }}</option>
-            </select>
+                label="Type"
+                v-model="event.type"
+                :options="eventTypes">
+            </vs-select>
 
             <vs-input
                 vs-label-placeholder="Date"
-                style="width:5.5em"
+                style="width:6em"
                 name="date"
                 ref="date"
                 :value="fulldate"
                 @blur="updateEvent"/>
-            <!--label for="date">Date</label>
-            <input
-                style="width:5.5em"
-                name="date"
-                ref="date"
-                :value="fulldate"
-                @blur="updateEvent"-->
 
-            <label for="place">Place</label>
-            <input
+            <vs-select
+                vs-label-placeholder="Place"
                 style="width:7em"
                 name="place"
                 ref="place"
-                :value="event.place"
-                @blur="updateEvent">
+                v-model="event.place"
+                @blur="updateEvent"
+                :options="placeList"
+                vs-autocomplete />
+            </vs-select>
 
-            <button @click="deleteEvent"><i>delete</i></button>
+            <vs-button vs-type="danger-border" vs-icon="delete" @click="deleteEvent"></vs-button>
         </div>
 
         <div v-show="!editing">

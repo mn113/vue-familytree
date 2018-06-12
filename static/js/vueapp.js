@@ -30,7 +30,7 @@ var app = new Vue({ // eslint-disable-line no-unused-vars
                     if (e.place && e.place.length > 0) list.add(e.place);
                 }
             }
-            return list;
+            return Array.from(list);
         }
     },
     methods: {
