@@ -1,4 +1,4 @@
-/* global fulldate, year, app */
+/* global fulldate, year, app, moment */
 
 Vue.component('event', {
     props: {
@@ -17,16 +17,23 @@ Vue.component('event', {
         updateEvent() {
             this.$emit('update', {
                 type: this.event.type,
-                date: new Date(this.$refs.date.value),
+                date: this.event.date,
                 place: this.$refs.place.value
             });
         }
     },
     computed: {
-        fulldate() {
-            return fulldate(this.event.date);
+        dateString: {
+            get() {
+                // Proxy for global utility function
+                return fulldate(this.event.date);
+            },
+            set(dateString) {
+                this.event.date = Date.parse(dateString);   // to milliseconds
+            }
         },
         year() {
+            // Proxy for global utility function
             return year(this.event.date);
         },
         eventTypes() {
@@ -52,6 +59,15 @@ Vue.component('event', {
             return app.placeList.map(p => {
                 return {text: p, value: p};
             }) || [];
+        },
+        validateDate(d) {
+            if (moment(d).isValid()) {
+                return true;
+            }
+            else {
+                console.log("Invalid date", d);
+                return false;
+            }
         }
     },
     template: `
@@ -67,28 +83,24 @@ Vue.component('event', {
             <vs-input
                 vs-label-placeholder="Date"
                 style="width:6em"
-                name="date"
                 ref="date"
-                :value="fulldate"
-                @blur="updateEvent"/>
+                v-model="dateString"
+                @blur="updateEvent"
+                vs-validation-function="validateDate"/>
 
-            <vs-select
+            <vs-input
                 vs-label-placeholder="Place"
                 style="width:7em"
-                name="place"
                 ref="place"
                 v-model="event.place"
-                @blur="updateEvent"
-                :options="placeList"
-                vs-autocomplete />
-            </vs-select>
+                @blur="updateEvent"/>
 
             <vs-button vs-type="danger-border" vs-icon="delete" @click="deleteEvent"></vs-button>
         </div>
 
         <div v-show="!editing">
             <span>{{ event.type }}</span>
-            <span>{{ fulldate }}</span>
+            <span>{{ dateString }}</span>
             <span>{{ event.place }}</span>
         </div>
     </div>`
