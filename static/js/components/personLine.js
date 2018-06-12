@@ -5,7 +5,14 @@ Vue.component('person-line', {
         id: String,
         fname: String,
         lname: String,
-        events: Array
+        events: Array,
+        short: {
+            type: Boolean,
+            default: false
+        }
+    },
+    data() {
+        return {};
     },
     computed: {
         startDate() {
@@ -38,10 +45,17 @@ Vue.component('person-line', {
                 .replace(/[\s]/g, '-');
         }
     },
+    methods: {
+        curtail(str) {
+            return str.split('-')[0];
+        }
+    },
     template: `
-    <p class="personLine">
+    <span class="personLine">
         <a :href="hash" @click="$root.selectNodeById(id)">{{ fname }} <b>{{ lname }}</b></a>
-        <span>{{ startDate }}</span>
-        <span>{{ endDate }}</span>
-    </p>`
+        <span v-if="short">{{ curtail(startDate) }}</span>
+        <span v-if="short">{{ curtail(endDate) }}</span>
+        <span v-if="!short">{{ startDate }}</span>
+        <span v-if="!short">{{ endDate }}</span>
+    </span>`
 });

@@ -82,6 +82,13 @@ i:hover {
 /***********/
 /* SIDEBAR */
 /***********/
+section {
+    margin-bottom: 1em;
+}
+ol, ul, h5 {
+    list-style-position: inside;
+    margin-left: 1em;
+}
 .editing {
 	background: #eee !important;
 }

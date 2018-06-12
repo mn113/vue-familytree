@@ -184,11 +184,11 @@ Vue.component('individual', {
 
                 <ol v-if="families.length > 0">
                     <li v-for="family in families">
-                        Spouse: <person-line v-bind="family.spouse"></person-line>
-                        <h3 v-if="family.children.length > 0">Children: <span>({{ family.children.length }})</span></h3>
+                        Spouse: <person-line v-bind="family.spouse" :short="true"></person-line>
+                        <h5 v-if="family.children.length > 0">Children: <span>({{ family.children.length }})</span></h5>
                         <ol>
                             <li v-for="child in family.children">
-                                <person-line v-bind="child"></person-line>
+                                <person-line v-bind="child" :short="true"></person-line>
                             </li>
                         </ol>
                     </li>
