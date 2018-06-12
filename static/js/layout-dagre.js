@@ -115,7 +115,7 @@ class Tree {
         var xCenterOffset = (document.querySelector("main").offsetWidth - 40 - graph.graph().width) / 2;
         inner.attr("transform", "translate(" + xCenterOffset + ", 20)");
         // TODO: Remove height setting once pan-and-zoom implemented:
-        svg.attr("height", graph.graph().height + 40);
+        //svg.attr("height", graph.graph().height + 40);
 
         svg.call(d3.zoom().on("zoom", () => {
             inner.attr("transform", d3.event.transform);

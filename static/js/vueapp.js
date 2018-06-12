@@ -105,7 +105,7 @@ var app = new Vue({ // eslint-disable-line no-unused-vars
         newFamily() {
             var f = new Family();
             console.log("Created f:", f);
-            this.families.push(f);
+            this.tree.families.push(f);
             Tree.addFamilyNode(f);
             Tree.layoutAndRender();
             Tree.selectNode(f.id);
@@ -113,7 +113,7 @@ var app = new Vue({ // eslint-disable-line no-unused-vars
 
         newLink(source, target) {
             console.log("Created link:", source, '->', target);
-            this.links.push({source, target});
+            this.tree.links.push({source, target});
             Tree.addEdge(source, target);
             Tree.layoutAndRender();
         }

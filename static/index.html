@@ -22,11 +22,13 @@
 				</label>
 				<vs-button @click="submitForm()">Upload</vs-button>
 		    </form>
-			<vs-button vs-type="primary-filled" @click="app.newIndividual()">Add Person</vs-button>
-            <vs-button vs-type="primary-filled" @click="app.newFamily()">Add Family</vs-button>
 		</header>
 		<main>
 			<svg id="dagre-svg" width="100%" height="100%"></svg>
+            <tool-palette
+                @add-indi="newIndividual()"
+                @add-fam="newFamily()">
+            </tool-palette>
 		</main>
 		<aside>
 			<div v-if="selectedNode">
@@ -97,6 +99,7 @@
 	<script src="js/components/family.js"></script>
 	<script src="js/components/personLine.js"></script>
 	<script src="js/components/event.js"></script>
+    <script src="js/components/toolPalette.js"></script>
 	<script src="js/vueapp.js"></script>
     <script src="js/layout-dagre.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js"></script>

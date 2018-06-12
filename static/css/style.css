@@ -104,6 +104,32 @@ i:hover {
 }
 
 
+/***********/
+/* PALETTE */
+/***********/
+#palette {
+    position: fixed;
+    top: 4em;
+    left: 1em;
+    width: 60px;
+    padding: 2px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto;
+    grid-column-gap: 4px;
+    grid-row-gap: 4px;
+    background: #666;
+}
+#palette button {
+    background: #333;
+    color: #eee;
+    transition: none;
+}
+#palette button:hover {
+    color: orange;
+}
+
+
 /********/
 /* TREE */
 /********/

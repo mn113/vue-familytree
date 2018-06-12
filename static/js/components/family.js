@@ -42,7 +42,7 @@ Vue.component('family', {
                 ref="married"
                 v-model="data.married"
                 :options="['Married','Unmarried','Divorced','Unknown']">
-            </select>
+            </vs-select>
 
             <h3>Parents <span>({{ data.parents.length }})</span></h3>
             <ul>
