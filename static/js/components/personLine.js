@@ -2,6 +2,7 @@
 
 Vue.component('person-line', {
     props: {
+        id: String,
         fname: String,
         lname: String,
         events: Array
@@ -27,11 +28,19 @@ Vue.component('person-line', {
             else if (bur.length > 0) return 'bur. ' + fulldate(bur[0].date);
             else if (crem.length > 0) return 'crem. ' + fulldate(crem[0].date);
             else return "";
+        },
+
+        hash() {
+            // sanitize by deleting unwanteds & kebabing:
+            return `#${this.fname}-${this.lname}`
+                .toLowerCase()
+                .replace(/['".,]/g, '')
+                .replace(/[\s]/g, '-');
         }
     },
     template: `
     <p class="personLine">
-        {{ fname }} <b>{{ lname }}</b>
+        <a :href="hash" @click="$root.selectNodeById(id)">{{ fname }} <b>{{ lname }}</b></a>
         <span>{{ startDate }}</span>
         <span>{{ endDate }}</span>
     </p>`

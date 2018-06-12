@@ -94,46 +94,50 @@ Vue.component('individual', {
             <i class="right" v-on:click="update">close</i>
             <i class="right" v-on:click="toggleEdit">save</i>
 
-            <h3>Names</h3>
+            <section>
+                <h3>Names</h3>
 
-            <div>
-                <vs-input
-                    vs-label-placeholder="First"
-                    ref="fname"
-                    v-model="data.fname"/>
+                <div>
+                    <vs-input
+                        vs-label-placeholder="First"
+                        ref="fname"
+                        v-model="data.fname"/>
 
-                <vs-input
-                    vs-label-placeholder="Last"
-                    ref="lname"
-                    v-model="data.lname"/>
-            </div>
+                    <vs-input
+                        vs-label-placeholder="Last"
+                        ref="lname"
+                        v-model="data.lname"/>
+                </div>
+            </section>
+            <section>
+                <vs-select
+                    label="Sex"
+                    ref="sex"
+                    v-model="data.sex"
+                    :options="sexOptions">
+                </vs-select>
+            </section>
+            <section>
+                <h3>Events <span>({{ data.events.length }})</span></h3>
 
-            <vs-select
-                label="Sex"
-                ref="sex"
-                v-model="data.sex"
-                :options="sexOptions">
-            </vs-select>
+                <div class="dates clearfix">
+                    <event v-for="event in sortedEvents"
+                        :event="event"
+                        :parentType="'INDI'"
+                        :key="event.id"
+                        :editing="true"
+                        @update="updateEvent(event.id, arguments[0])"
+                        @delete="deleteEvent(event.id)">
+                    </event>
 
-            <h3>Events <span>({{ data.events.length }})</span></h3>
-
-            <div class="dates clearfix">
-                <event v-for="event in sortedEvents"
-                    :event="event"
-                    :parentType="'INDI'"
-                    :key="event.id"
-                    :editing="true"
-                    @update="updateEvent(event.id, arguments[0])"
-                    @delete="deleteEvent(event.id)">
-                </event>
-
-                <vs-button
-                    vs-type="primary-filled"
-                    @click="addEvent()"
-                    class="right"
-                    vs-icon="add">Add Event
-                </vs-button>
-            </div>
+                    <vs-button
+                        vs-type="primary-filled"
+                        @click="addEvent()"
+                        class="right"
+                        vs-icon="add">Add Event
+                    </vs-button>
+                </div>
+            </section>
         </div>
 
         <div v-show="!editing">
@@ -141,45 +145,55 @@ Vue.component('individual', {
 
             <h3 class="name">{{ data.fname }} <b>{{ data.lname }}</b> {{ symbol }}</h3>
 
-            <h3>Events <span>({{ data.events.length }})</span></h3>
+            <section>
+                <h3>Events <span>({{ data.events.length }})</span></h3>
 
-            <div class="dates clearfix">
-                <event v-for="event in sortedEvents"
-                    :event="event"
-                    :key="event.id"
-                    :editing="false">
-                </event>
-            </div>
+                <div class="dates clearfix">
+                    <event v-for="event in sortedEvents"
+                        :event="event"
+                        :key="event.id"
+                        :editing="false">
+                    </event>
+                </div>
+            </section>
+        </div>
 
-            <h3>Parents <span>({{ parents.length }})</span></h3>
+        <div v-show="true">
+            <section>
+                <h3>Parents <span>({{ parents.length }})</span></h3>
 
-            <ul v-if="parents.length > 0">
-                <li v-for="parent in parents">
-                    <person-line v-bind="parent"></person-line>
-                </li>
-            </ul>
+                <ul v-if="parents.length > 0">
+                    <li v-for="parent in parents">
+                        <person-line v-bind="parent"></person-line>
+                    </li>
+                </ul>
+            </section>
 
-            <h3>Siblings <span>({{ siblings.length }})</span></h3>
+            <section>
+                <h3>Siblings <span>({{ siblings.length }})</span></h3>
 
-            <ol v-if="siblings.length > 0">
-                <li v-for="sibling in siblings">
-                    <person-line v-bind="sibling"></person-line>
-                </li>
-            </ol>
+                <ol v-if="siblings.length > 0">
+                    <li v-for="sibling in siblings">
+                        <person-line v-bind="sibling"></person-line>
+                    </li>
+                </ol>
+            </section>
 
-            <h3>Families <span>({{ families.length }})</span></h3>
+            <section>
+                <h3>Families <span>({{ families.length }})</span></h3>
 
-            <ol v-if="families.length > 0">
-                <li v-for="family in families">
-                    Spouse: <person-line v-bind="family.spouse"></person-line>
-                    <h3 v-if="family.children.length > 0">Children: <span>({{ family.children.length }})</span></h3>
-                    <ol>
-                        <li v-for="child in family.children">
-                            <person-line v-bind="child"></person-line>
-                        </li>
-                    </ol>
-                </li>
-            </ol>
+                <ol v-if="families.length > 0">
+                    <li v-for="family in families">
+                        Spouse: <person-line v-bind="family.spouse"></person-line>
+                        <h3 v-if="family.children.length > 0">Children: <span>({{ family.children.length }})</span></h3>
+                        <ol>
+                            <li v-for="child in family.children">
+                                <person-line v-bind="child"></person-line>
+                            </li>
+                        </ol>
+                    </li>
+                </ol>
+            </section>
         </div>
     </div>`
 });
