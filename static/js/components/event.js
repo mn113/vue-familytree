@@ -16,25 +16,26 @@ Vue.component('event', {
         },
         updateEvent() {
             this.$emit('update', {
-                type: this.event.type,
-                date: this.event.date,
+                type: this.$refs.type.value,
+                date: Date.parse(this.$refs.date.value),
                 place: this.$refs.place.value
             });
+        },
+        stringifyDate() {
+
         }
     },
     computed: {
         dateString: {
             get() {
+                console.log("Computed fulldate property");
                 // Proxy for global utility function
                 return fulldate(this.event.date);
             },
             set(dateString) {
+                console.log("Parsed", Date.parse(dateString));
                 this.event.date = Date.parse(dateString);   // to milliseconds
             }
-        },
-        year() {
-            // Proxy for global utility function
-            return year(this.event.date);
         },
         eventTypes() {
             if (this.parentType === 'INDI') {
@@ -77,12 +78,13 @@ Vue.component('event', {
                 ref="type"
                 label="Type"
                 v-model="event.type"
-                :options="eventTypes">
+                :options="eventTypes"
+                @change="updateEvent">
             </vs-select>
 
             <vs-input
                 vs-label-placeholder="Date"
-                style="width:6em"
+                style="width:7em"
                 ref="date"
                 v-model="dateString"
                 @blur="updateEvent"
