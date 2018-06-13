@@ -7,8 +7,8 @@
 	<link rel="stylesheet" href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons'>
 	<link rel="stylesheet" href="https://unpkg.com/normalize.css@8.0.0/normalize.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vuesax/dist/vuesax.css">
+    <link rel="stylesheet" href="https://unpkg.com/v-autocomplete@1.8.2/dist/v-autocomplete.css">
 	<link rel="stylesheet" href="css/style.css">
-    <!--link rel="stylesheet" href="https://unpkg.com/v-autocomplete@1.8.2/dist/v-autocomplete.css"></link-->
 	<link rel="shortcut icon" href="favicon.ico">
 
 </head>
@@ -98,14 +98,14 @@
 	<script src="js/components/individual.js"></script>
 	<script src="js/components/family.js"></script>
 	<script src="js/components/personLine.js"></script>
-	<script src="js/components/event.js"></script>
+    <script src="js/components/event.js"></script>
     <script src="js/components/toolPalette.js"></script>
 	<script src="js/vueapp.js"></script>
     <script src="js/layout-dagre.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js"></script>
-	<!--script src="https://unpkg.com/v-autocomplete@1.8.2/dist/v-autocomplete.js"></script-->
+    <script src="https://unpkg.com/fecha@2.3.3/fecha.min.js"></script>
+    <script src="https://unpkg.com/v-autocomplete@1.8.2/dist/v-autocomplete.js"></script>
 	<script>
-    //Vue.use(VAutocomplete.default);
+    Vue.use(VAutocomplete.default);
 	const gedcom2en = {
 		"BIRT": "birth",
 		"BAPM": "baptism",

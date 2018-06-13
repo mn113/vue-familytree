@@ -126,8 +126,8 @@ Vue.component('individual', {
                         :parentType="'INDI'"
                         :key="event.id"
                         :editing="true"
-                        @update="updateEvent(event.id, arguments[0])"
-                        @delete="deleteEvent(event.id)">
+                        @update="event = arguments[0]"
+                        @delete="event = null">
                     </event>
 
                     <vs-button

@@ -20,9 +20,6 @@ Vue.component('event', {
                 date: Date.parse(this.$refs.date.value),
                 place: this.$refs.place.value
             });
-        },
-        stringifyDate() {
-
         }
     },
     computed: {
@@ -37,6 +34,7 @@ Vue.component('event', {
                 this.event.date = Date.parse(dateString);   // to milliseconds
             }
         },
+
         eventTypes() {
             if (this.parentType === 'INDI') {
                 return [
@@ -55,12 +53,12 @@ Vue.component('event', {
                 ];
             }
         },
+
         placeList() {
             // Hopefully it has already been computed on the root instance...
-            return app.placeList.map(p => {
-                return {text: p, value: p};
-            }) || [];
+            return app.placeList.sort() || [];
         },
+
         validateDate(d) {
             if (moment(d).isValid()) {
                 return true;
@@ -95,7 +93,16 @@ Vue.component('event', {
                 style="width:7em"
                 ref="place"
                 v-model="event.place"
+                :list="event.id"
                 @blur="updateEvent"/>
+            <datalist :id="event.id">
+                <option v-for="place in placeList" :value="place" />
+            </datalist>
+
+            <!--input-suggestions
+                :id="'x'"
+                v-model="event.place">
+            </input-suggestions-->
 
             <vs-button vs-type="danger-border" vs-icon="delete" @click="deleteEvent"></vs-button>
         </div>

@@ -158,7 +158,7 @@ function mapIndividual(arr) {
     //.forEach(obj => { console.log(`${obj}`.red); return obj; })
     events = events.filter(obj => obj.nodeList.length > 0)
         .map(obj => ({
-            id: eventId++,
+            id: 'e_' + eventId++,
             type: obj.type,
             date: Date.parse(extractValue('DATE', obj.nodeList)),	// to milliseconds
             place: extractValue('PLAC', obj.nodeList)
