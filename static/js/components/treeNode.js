@@ -11,36 +11,41 @@ var treeNodeMixin = {  // eslint-disable-line no-unused-vars
             this.editing = !this.editing;
         },
 
+        // A tree node can have its own Events
+        // Common Event methods:
         addEvent() {
+            console.log("Adding empty event");
             this.data.events.push({
                 type: "",
                 date: "",
-                place: ""
+                place: "",
+                id: this.$root.eventId++
             });
-            //this.update();
-            //this.editing = true;
         },
 
         deleteEvent(id) {
+            console.log("Deleting event", id);
             // Find event index in array by id:
             var i = this.data.events.findIndex(e => e.id === id);
             if (i > -1) {
                 this.data.events.splice(i,1);
-                //this.update();
-                //this.editing = true;
+                this.update();
+                this.editing = true;
             }
         },
 
         updateEvent(id, value) {
+            console.log("Updating event", id);
             // Find event index in array by id:
             var i = this.data.events.findIndex(e => e.id === id);
             if (i > -1) {
                 this.data.events[i] = value;
-                //this.update();
-                //this.editing = true;
+                this.update();
+                this.editing = true;
             }
         },
 
+        // Needs to be different on Individual & Family:
         disconnectFrom(otherNode) {
             // delete edge
             // remove person's family
@@ -56,9 +61,11 @@ var treeNodeMixin = {  // eslint-disable-line no-unused-vars
         }
     },
     computed: {
-        sortedEvents() {
-            // Always sort person's events chronologically:
-            return this.data.events.sort((a, b) => a.date - b.date);
+        sortedEvents: {
+            get() {
+                // Always sort person's events chronologically:
+                return this.data.events.sort((a, b) => a.date - b.date);
+            }
         }
     }
 };

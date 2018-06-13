@@ -10,7 +10,10 @@ const app = express();
 const upload = multer({ dest: 'uploads/' });
 var port = 3000;
 var treeData = {};
-var eventId = 0;
+// Counters which will also be needed on front-end:
+treeData.individualId = 0;
+treeData.familyId = 0;
+treeData.eventId = 0;
 
 // First things first...
 readGedcomFile('gedcom/fictitious.ged');
@@ -72,13 +75,15 @@ function processNodes(json) {
 
         if (node.tag === 'INDI') {
             var indiv = mapIndividual(node.tree);
-            indiv.id = node.pointer;
+            // Make up our own sequential ids only if a pointer not present
+            indiv.id = node.pointer || 'i_' + treeData.individualId++;
             indiv.type = "INDI";
             cleanNodes.push(indiv);
         }
         else if (node.tag === 'FAM') {
             var family = mapFamily(node.tree);
-            family.id = node.pointer;
+            // Make up our own sequential ids only if a pointer not present
+            family.id = node.pointer || 'f_' + treeData.familyId++;
             family.type = "FAM";
             cleanNodes.push(family);
         }
@@ -158,7 +163,7 @@ function mapIndividual(arr) {
     //.forEach(obj => { console.log(`${obj}`.red); return obj; })
     events = events.filter(obj => obj.nodeList.length > 0)
         .map(obj => ({
-            id: 'e_' + eventId++,
+            id: 'e_' + treeData.eventId++,
             type: obj.type,
             date: Date.parse(extractValue('DATE', obj.nodeList)),	// to milliseconds
             place: extractValue('PLAC', obj.nodeList)
@@ -212,7 +217,7 @@ function mapFamily(arr) {
     //pino.info('EVENT'.blue, events[0].nodeList[0].tree);
     events = events.filter(obj => obj.nodeList.length > 0)
         .map(obj => ({
-            id: eventId++,
+            id: 'e_' + treeData.eventId++,
             type: obj.type,
             date: Date.parse(extractValue('DATE', obj.nodeList)),	// to milliseconds
             place: extractValue('PLAC', obj.nodeList)

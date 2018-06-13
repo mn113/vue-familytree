@@ -13,7 +13,10 @@ var app = new Vue({ // eslint-disable-line no-unused-vars
             links: []
         },
         selectedNode: null,
-        fileToUpload: ""
+        fileToUpload: "",
+        individualId: 0,
+        familyId: 0,
+        eventId: 0
     },
     mounted() {
         this.fetchTreeData();
@@ -42,6 +45,10 @@ var app = new Vue({ // eslint-disable-line no-unused-vars
                     this.tree.individuals = response.data.nodes.filter(n => n.type === "INDI");
                     this.tree.families = response.data.nodes.filter(n => n.type === "FAM");
                     this.tree.links = response.data.links;
+                    // Counters:
+                    this.individualId = response.data.individualId;
+                    this.familyId = response.data.familyId;
+                    this.eventId = response.data.eventId;
                     // Now we can graph:
                     Tree.addAllNodes();
                     Tree.addAllEdges();
@@ -120,15 +127,12 @@ var app = new Vue({ // eslint-disable-line no-unused-vars
     }
 });
 
-var INDI_ID = 0;
-var FAM_ID = 0;
-
 /* TEMPORARY TEMPLATES */
 
 class Individual {
     constructor() {
         return {
-            id: "i_" + INDI_ID++,
+            id: "i_" + app.$data.individualId++,
             type: "INDI",
             fname: "New",
             lname: "Person",
@@ -143,7 +147,7 @@ class Individual {
 class Family {
     constructor() {
         return {
-            id: 'f_' + FAM_ID++,
+            id: 'f_' + app.$data.familyId++,
             type: "FAM",
             married: "unknown",
             events: [],

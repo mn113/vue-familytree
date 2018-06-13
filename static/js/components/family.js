@@ -7,7 +7,13 @@ Vue.component('family', {
     },
     data() {
         return {
-            editing: false
+            editing: false,
+            marriageOptions: [
+                {text: 'Married', value: 'Married'},
+                {text: 'Unmarried', value: 'Unmarried'},
+                {text: 'Divorced', value: 'Divorced'},
+                {text: 'Unknown', value: 'Unknown'}
+            ]
         };
     },
     methods: {
@@ -21,7 +27,7 @@ Vue.component('family', {
     },
     computed: {
         resolvedParents() {
-            // Rresolve my parents as Objects:
+            // Resolve my parents as Objects:
             return this.data.parents.map(pid => app.getIndividualById(pid));
         },
 
@@ -36,13 +42,27 @@ Vue.component('family', {
             <i class="right" @click="update">close</i>
             <i class="right" @click="toggleEdit">save</i>
 
+            <h3>Status</h3>
             <vs-select
                 label="Status"
                 name="married"
                 ref="married"
                 v-model="data.married"
-                :options="['Married','Unmarried','Divorced','Unknown']">
+                :options="marriageOptions">
             </vs-select>
+
+            <h3>Events <span>({{ data.events.length }})</span></h3>
+            <div class="dates clearfix">
+                <event v-for="event in sortedEvents"
+                    :key="event.id"
+                    :parentType="'FAM'"
+                    :editing="true"
+                    :event="event"
+                    @update="updateEvent(event.id, arguments[0])"
+                    @delete="deleteEvent(event.id)">
+                </event>
+                <button @click="addEvent" class="right"><i>add</i>Add Event</button>
+            </div>
 
             <h3>Parents <span>({{ data.parents.length }})</span></h3>
             <ul>
@@ -57,23 +77,23 @@ Vue.component('family', {
                     <person-line v-bind="child"></person-line>
                 </li>
             </ul>
-
-            <h3>Events <span>({{ data.events.length }})</span></h3>
-            <div class="dates clearfix">
-                <event v-for="event in sortedEvents"
-                    :event="event"
-                    :key="event.id"
-                    :parentType="'FAM'"
-                    :editing="true"
-                    @update="event = arguments[0]"><!-- can't target by index -->
-                </event>
-                <button @click="addEvent" class="right"><i>add</i>Add Event</button>
-            </div>
         </div>
 
         <div v-show="!editing">
             <i class="right" @click="toggleEdit">edit</i>
 
+            <h3>Status</h3>
+            <p>{{ data.married }}</p>
+
+            <h3>Events <span>({{ data.events.length }})</span></h3>
+            <div class="dates clearfix">
+                <event v-for="event in sortedEvents"
+                    :key="event.id"
+                    :editing="false"
+                    :event="event">
+                </event>
+            </div>
+
             <h3>Parents <span>({{ data.parents.length }})</span></h3>
             <ul>
                 <li v-for="parent in resolvedParents">
@@ -87,16 +107,6 @@ Vue.component('family', {
                     <person-line v-bind="child"></person-line>
                 </li>
             </ul>
-
-            <h3>Events <span>({{ data.events.length }})</span></h3>
-            <div class="dates clearfix">
-                <event v-for="event in sortedEvents"
-                    :event="event"
-                    :key="event.id"
-                    :editing="false">
-                </event>
-            </div>
-
         </div>
     </div>`
 });

@@ -16,6 +16,7 @@ Vue.component('event', {
         },
         updateEvent() {
             this.$emit('update', {
+                id: this.id,
                 type: this.$refs.type.value,
                 date: Date.parse(this.$refs.date.value),
                 place: this.$refs.place.value

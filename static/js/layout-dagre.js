@@ -262,7 +262,9 @@ class Tree {
 
         // Finally, remove the single unique link from Vue:
         console.log(app.$data.tree.links.length);
-        app.$data.tree.links = app.$data.tree.links.filter(e => e.source !== source || e.target !== target);
+        app.$data.tree.links = app.$data.tree.links.filter(e => {
+            return e.source !== source || e.target !== target;
+        });
         console.log(app.$data.tree.links.length);
         Tree.redraw();
     }
