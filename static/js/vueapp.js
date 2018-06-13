@@ -13,6 +13,7 @@ var app = new Vue({ // eslint-disable-line no-unused-vars
             links: []
         },
         selectedNode: null,
+        homePerson: null,
         fileToUpload: "",
         individualId: 0,
         familyId: 0,
@@ -123,6 +124,16 @@ var app = new Vue({ // eslint-disable-line no-unused-vars
             this.tree.links.push({source, target});
             Tree.addEdge(source, target);
             Tree.layoutAndRender();
+        },
+
+        goHome() {
+            console.log("Going Home");
+            if (this.homePerson !== null) this.selectedNode = this.homePerson;
+            Tree.redraw();
+        },
+
+        setHomePerson() {
+            this.homePerson = this.selectedNode;
         }
     }
 });

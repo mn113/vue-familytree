@@ -51,6 +51,10 @@ Vue.component('individual', {
             return this.data.sex === 'M' ? '♂' : this.data.sex === 'F' ? '♀' : '';
         },
 
+        isHomePerson() {
+            return this.$root.homePerson && this.$root.homePerson.id === this.data.id;
+        },
+
         isDisconnected() {
             return this.data.famsHeadOf.length === 0 && this.data.famsChildOf.length === 0;
         },
@@ -90,6 +94,15 @@ Vue.component('individual', {
     },
     template: `
     <div :class="{editing: editing}">
+
+        <vs-button
+            vs-type="primary-border"
+            vs-icon="home"
+            :class="{ 'vs-button-dark-border': !isHomePerson, 'vs-button-success-border': isHomePerson }"
+            v-tooltip="'Set as Home person'"
+            @click="$root.setHomePerson()">
+        </vs-button>
+
         <div v-show="editing">
             <i class="right" v-on:click="update">close</i>
             <i class="right" v-on:click="toggleEdit">save</i>
