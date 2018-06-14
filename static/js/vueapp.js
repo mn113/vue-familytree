@@ -85,6 +85,7 @@ var app = new Vue({ // eslint-disable-line no-unused-vars
         selectNodeById(id) {
             var matched = this.nodes.filter(n => n.id === id);
             if (matched.length > 0) this.selectedNode = matched[0];
+            Tree.centreNode(id);
         },
 
         selectNone() {
@@ -130,6 +131,7 @@ var app = new Vue({ // eslint-disable-line no-unused-vars
             console.log("Going Home");
             if (this.homePerson !== null) this.selectedNode = this.homePerson;
             Tree.redraw();
+            Tree.centreNode(this.selectedNode.id);
         },
 
         setHomePerson() {

@@ -22,7 +22,7 @@ header {
 main {
 	grid-row: 2;
 	grid-column: 1;
-	padding: 0.2em 2em;
+	padding: 5px 5px;
 }
 aside {
 	grid-row: 2;
@@ -180,33 +180,44 @@ ol, ul, h5 {
 }
 .node.selected rect,
 .node.selected ellipse {
+    stroke-width: 2.5px;
+}
+.node.selected rect {
+	stroke: #333;
+}
+.node.M.selected rect {
+	stroke: blue;
+}
+.node.F.selected rect {
 	stroke: red;
-	stroke-width: 2.5px;
 }
-.node:hover rect {
-    xstroke-width: 4px;
+.node.selected ellipse {
+    stroke: brown;
 }
-#dagre-svg .label p {
-	text-align: center;
-	font-weight: 300;
-	font-family: Roboto, sans-serf;
-	font-size: 14px;
-}
-.handles text {
-    fill: #ccc;
+.node .handles text {
+    fill: #999;
     color: white;
 	font-family: "Material Icons";
 	cursor: pointer;
     opacity: 0;
 }
 .node:hover .handles text {
+    fill: #666;
     opacity: 1;
 }
 .handles text:hover {
-    fill: red;
+    fill: black;
+    opacity: 1;
 }
 .handles text.active {
 	fill: purple;
+    opacity: 1;
+}
+.node .label p {
+	text-align: center;
+	font-weight: 300;
+	font-family: Roboto, sans-serf;
+	font-size: 14px;
 }
 .edgePath path.path {
 	stroke: #333;
@@ -219,5 +230,5 @@ ol, ul, h5 {
 	cursor: pointer;
 }
 .edgeLabel i:hover {
-    color: red;
+    color: red; /* scissors */
 }

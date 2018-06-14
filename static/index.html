@@ -7,7 +7,7 @@
 	<link rel="stylesheet" href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons'>
 	<link rel="stylesheet" href="https://unpkg.com/normalize.css@8.0.0/normalize.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vuesax/dist/vuesax.css">
-    <link rel="stylesheet" href="https://unpkg.com/v-autocomplete@1.8.2/dist/v-autocomplete.css">
+    <!--link rel="stylesheet" href="https://unpkg.com/v-autocomplete@1.8.2/dist/v-autocomplete.css"-->
 	<link rel="stylesheet" href="css/style.css">
 	<link rel="shortcut icon" href="favicon.ico">
 
@@ -46,7 +46,10 @@
 				<span v-else>Invalid selection.</span>
 			</div>
 			<div v-else>
-                <tree-stats :individuals="tree.individuals" :title="meta.title" :author="meta.author"></tree-stats>
+                <tree-stats
+                    v-model="meta"
+                    :individuals="tree.individuals">
+                </tree-stats>
             </div>
 				<hr>
 			<i>content_cut</i>
@@ -101,21 +104,13 @@
 	<script src="js/components/personLine.js"></script>
     <script src="js/components/event.js"></script>
     <script src="js/components/toolPalette.js"></script>
+    <script src="js/components/editableText.js"></script>
 	<script src="js/vueapp.js"></script>
     <script src="js/layout-dagre.js"></script>
     <script src="https://unpkg.com/fecha@2.3.3/fecha.min.js"></script>
-    <script src="https://unpkg.com/v-autocomplete@1.8.2/dist/v-autocomplete.js"></script>
+    <!--script src="https://unpkg.com/v-autocomplete@1.8.2/dist/v-autocomplete.js"></script-->
 	<script>
-    Vue.use(VAutocomplete.default);
-	const gedcom2en = {
-		"BIRT": "birth",
-		"BAPM": "baptism",
-		"CHR" : "christening",
-		"CHRA": "adult christening",
-		"DEAT": "death",
-		"BURI": "burial",
-		"CREM": "cremation"
-	};
+        //Vue.use(VAutocomplete.default);
 	</script>
 </body>
 <html>

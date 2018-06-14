@@ -104,7 +104,7 @@ Vue.component('individual', {
             @click="$root.setHomePerson()">
         </vs-button>
 
-        <div v-show="editing">
+        <div v-if="editing">
             <i class="right" v-on:click="update">close</i>
             <i class="right" v-on:click="toggleEdit">save</i>
 
@@ -154,7 +154,7 @@ Vue.component('individual', {
             </section>
         </div>
 
-        <div v-show="!editing">
+        <div v-if="!editing">
             <i class="right" v-on:click="toggleEdit">edit</i>
 
             <h3 class="name">{{ data.fname }} <b>{{ data.lname }}</b> {{ symbol }}</h3>
@@ -172,7 +172,7 @@ Vue.component('individual', {
             </section>
         </div>
 
-        <div v-show="true">
+        <div>
             <section>
                 <h3>Parents <span>({{ parents.length }})</span></h3>
 

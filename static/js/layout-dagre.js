@@ -1,16 +1,23 @@
 /* global dagre, dagreD3, d3, year, app */
 
-// Create a new directed graph
+// Create a new directed graph:
 var graph = new dagreD3.graphlib.Graph();
-// Set an object for the graph label
-graph.setGraph({});
-graph.setDefaultNodeLabel(() => {});    // New Person/Family or somesuch label?
+graph.setGraph({});     // its label
+graph.setDefaultNodeLabel(() => {});
 
 // Set up an SVG group so that we can translate the final graph.
 var svg = d3.select("svg"),
-    inner = svg.append("g");
+    inner = svg.append("g"),
+    treeZoom = d3.zoom();
 
-var activeHandle = null; // tracks last clicked node handle
+// Attach pan & zoom functionality:
+svg.call(treeZoom.on("zoom", () => {
+    inner.attr("transform", d3.event.transform);
+}));
+
+// Track last clicked node handle:
+var activeHandle = null;
+
 
 class Tree {
     // Add or update a node and its label in the graph:
@@ -111,15 +118,8 @@ class Tree {
         Tree.addHandlesToEdges();
 
         // Center the graph - we need the absolute width of the SVG here, not 100%
-        //var xCenterOffset = (svg.attr("width") - graph.graph().width) / 2;
         var xCenterOffset = (document.querySelector("main").offsetWidth - 40 - graph.graph().width) / 2;
         inner.attr("transform", "translate(" + xCenterOffset + ", 20)");
-        // TODO: Remove height setting once pan-and-zoom implemented:
-        //svg.attr("height", graph.graph().height + 40);
-
-        svg.call(d3.zoom().on("zoom", () => {
-            inner.attr("transform", d3.event.transform);
-        }));
     }
 
     static addHandlesToNodes() {
@@ -307,5 +307,13 @@ class Tree {
         // Update Vue data:
         app.selectNodeById(id);
         console.log("Node", id, "selected");
+    }
+
+    static centreNode(id) {
+        var node = graph.node(id),
+            cx = node.x + node.width / 2,
+            cy = node.y + node.height / 2;
+        inner.attr("transform", `translate(-${cx},-${cy})`);
+        //treeZoom.attr("transform", `translate(${cx},${cy})`); //.translateTo([cx,cy]);
     }
 }

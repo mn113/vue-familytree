@@ -1,9 +1,15 @@
 /* global */
 
 Vue.component('tree-stats', {
+    model: {
+        prop: 'meta',
+        event: 'update'
+    },
     props: {
-        title: String,
-        author: String,
+        meta: {
+            title: String,
+            author: String
+        },
         individuals: Array
     },
     computed: {
@@ -38,10 +44,12 @@ Vue.component('tree-stats', {
             return this.surnamesRank.length;
         }
     },
+    methods: {
+    },
     template: `
     <div class="treeStats">
-        <h2><input v-model="title"></input></h2>
-        <h4>by <input v-model="author"></input></h4>
+        <h2><editable-text v-model="meta.title"/></h2>
+        <h4>by <editable-text v-model="meta.author"/></h4>
         <p>People: {{ totalPeople }}</p>
         <p>Males: {{ males }}</p>
         <p>Females: {{ females }}</p>
