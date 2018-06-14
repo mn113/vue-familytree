@@ -1,4 +1,4 @@
-/* global dagre, dagreD3, d3, year, app */
+/* global dagre, dagreD3, d3, year, app, $vs */
 
 // Create a new directed graph:
 var graph = new dagreD3.graphlib.Graph();
@@ -287,6 +287,8 @@ class Tree {
         graph.removeNode(node.id);
 
         Tree.redraw();
+
+        app.$vs.notify('Node deleted');
     }
 
     static redraw() {

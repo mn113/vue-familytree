@@ -59,6 +59,7 @@ var app = new Vue({ // eslint-disable-line no-unused-vars
                 })
                 .catch(error => {
                     console.log(error);
+                    this.notify('Problem fetching data. Please reload the page.', 'error');
                     this.errored = true;
                 })
                 .finally(() => {
@@ -79,9 +80,13 @@ var app = new Vue({ // eslint-disable-line no-unused-vars
                 }
             }).then(() => {
                 console.log('Upload succeeded');
+                this.notify('Upload successful.');
                 this.fetchTreeData();
                 this.fileToUpload = "";
-            }).catch(err => console.log('Upload failed', err));
+            }).catch(err => {
+                console.log('Upload failed', err);
+                this.notify('Upload failed', 'error');
+            });
         },
 
         selectNodeById(id) {
@@ -111,6 +116,7 @@ var app = new Vue({ // eslint-disable-line no-unused-vars
             Tree.addIndividualNode(i);
             Tree.layoutAndRender();
             Tree.selectNode(i.id);
+            this.notify('Person created.');
         },
 
         newFamily() {
@@ -120,6 +126,7 @@ var app = new Vue({ // eslint-disable-line no-unused-vars
             Tree.addFamilyNode(f);
             Tree.layoutAndRender();
             Tree.selectNode(f.id);
+            this.notify('Family created.');
         },
 
         newLink(source, target) {
@@ -127,6 +134,7 @@ var app = new Vue({ // eslint-disable-line no-unused-vars
             this.tree.links.push({source, target});
             Tree.addEdge(source, target);
             Tree.layoutAndRender();
+            this.notify('Link created.');
         },
 
         goHome() {
@@ -138,6 +146,7 @@ var app = new Vue({ // eslint-disable-line no-unused-vars
 
         setHomePerson() {
             this.homePerson = this.selectedNode;
+            this.notify('Home Person set.');
         },
 
         showUploadDialog() {
@@ -146,6 +155,14 @@ var app = new Vue({ // eslint-disable-line no-unused-vars
 
         hideUploadDialog() {
             this.uploadDialogIsOpen = false;
+        },
+
+        notify(text, color = 'success') {
+            this.$vs.notify({
+                position: 'top-right',
+                color: color,
+                text: text
+            });
         }
     }
 });
