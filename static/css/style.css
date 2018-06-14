@@ -5,19 +5,19 @@
 	display: grid;
 	height: 100vh;
 	grid-template-rows: 50px 1fr 50px;
-	grid-template-columns: 2fr 1fr;
+	grid-template-columns: 1fr 500px;
 }
 header {
 	grid-row: 1;
 	grid-column: 1 / span 2;
-	background: #666;
-	color: #eee;
-	padding: 0.2em 0.5em;
-	display: flex;
-	flex-direction: row;
-	flex-wrap: nowrap;
-	align-items: center;
-	justify-content: space-between;
+	xbackground: #666;
+	xcolor: #eee;
+	padding: 0 0.5em;
+	xdisplay: flex;
+	xflex-direction: row;
+	xflex-wrap: nowrap;
+	xalign-items: center;
+	xjustify-content: space-between;
 }
 main {
 	grid-row: 2;
