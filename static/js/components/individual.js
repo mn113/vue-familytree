@@ -96,21 +96,36 @@ Vue.component('individual', {
     template: `
     <div :class="{editing: editing}">
 
-        <vs-button
-            vs-type="primary-border"
-            vs-icon="home"
-            :class="{ 'vs-button-dark-border': !isHomePerson, 'vs-button-success-border': isHomePerson }"
-            v-tooltip="'Set as Home person'"
-            @click="$root.setHomePerson()">
-        </vs-button>
+        <vs-dropdown class="right" vs-trigger-click>
+            <vs-button class="btn-drop" vs-type="primary-filled" vs-icon="expand_more"></vs-button>
+            <vs-dropdown-menu :style="{width: '15em'}">
+                <vs-dropdown-item>
+                    <vs-button
+                        vs-type="dark-border"
+                        vs-icon="home"
+                        :class="{ 'vs-icon-dark-border': !isHomePerson, 'vs-icon-success-filled': isHomePerson }"
+                        @click="$root.setHomePerson()">
+                        Set as Home person
+                    </vs-button>
+                </vs-dropdown-item>
+                <vs-dropdown-item>
+                    <vs-button
+                        vs-type="dark-border"
+                        vs-icon="delete"
+                        @click="$root.deletePerson()">
+                        Delete person
+                    </vs-button>
+                </vs-dropdown-item>
+            </vs-dropdown-menu>
+        </vs-dropdown>
 
         <div v-if="editing">
             <i class="right" v-on:click="update">close</i>
             <i class="right" v-on:click="toggleEdit">save</i>
 
             <section>
+                <vs-divider></vs-divider>
                 <h3>Names</h3>
-
                 <div>
                     <vs-input
                         vs-label-placeholder="First"
@@ -131,9 +146,10 @@ Vue.component('individual', {
                     :options="sexOptions">
                 </vs-select>
             </section>
-            <section>
-                <h3>Events <span>({{ data.events.length }})</span></h3>
 
+            <section>
+                <vs-divider></vs-divider>
+                <h3>Events <span>({{ data.events.length }})</span></h3>
                 <div class="dates clearfix">
                     <event v-for="event in sortedEvents"
                         :event="event"
@@ -157,11 +173,14 @@ Vue.component('individual', {
         <div v-if="!editing">
             <i class="right" v-on:click="toggleEdit">edit</i>
 
-            <h3 class="name">{{ data.fname }} <b>{{ data.lname }}</b> {{ symbol }}</h3>
+            <section>
+                <vs-divider></vs-divider>
+                <h3 class="name">{{ data.fname }} <b>{{ data.lname }}</b> {{ symbol }}</h3>
+            </section>
 
             <section>
+                <vs-divider></vs-divider>
                 <h3>Events <span>({{ data.events.length }})</span></h3>
-
                 <div class="dates clearfix">
                     <event v-for="event in sortedEvents"
                         :event="event"
@@ -174,8 +193,8 @@ Vue.component('individual', {
 
         <div>
             <section>
+                <vs-divider></vs-divider>
                 <h3>Parents <span>({{ parents.length }})</span></h3>
-
                 <ul v-if="parents.length > 0">
                     <li v-for="parent in parents">
                         <person-line v-bind="parent"></person-line>
@@ -184,8 +203,8 @@ Vue.component('individual', {
             </section>
 
             <section>
+                <vs-divider></vs-divider>
                 <h3>Siblings <span>({{ siblings.length }})</span></h3>
-
                 <ol v-if="siblings.length > 0">
                     <li v-for="sibling in siblings">
                         <person-line v-bind="sibling"></person-line>
@@ -194,8 +213,8 @@ Vue.component('individual', {
             </section>
 
             <section>
+                <vs-divider></vs-divider>
                 <h3>Families <span>({{ families.length }})</span></h3>
-
                 <ol v-if="families.length > 0">
                     <li v-for="family in families">
                         Spouse: <person-line v-bind="family.spouse" :short="true"></person-line>

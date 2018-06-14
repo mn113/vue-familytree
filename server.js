@@ -16,7 +16,7 @@ treeData.familyId = 0;
 treeData.eventId = 0;
 
 // First things first...
-readGedcomFile('gedcom/fictitious.ged');
+readGedcomFile('gedcom/massie.ged');
 
 // Serve basic files:
 app.use(express.static('static'));
@@ -159,8 +159,6 @@ function mapIndividual(arr) {
             type: key,
             nodeList: arr.filter(node => node.tag === key)
         }));
-    pino.info('EVENT'.blue, events[0].nodeList[0].tree);
-    //.forEach(obj => { console.log(`${obj}`.red); return obj; })
     events = events.filter(obj => obj.nodeList.length > 0)
         .map(obj => ({
             id: 'e_' + treeData.eventId++,
@@ -214,7 +212,6 @@ function mapFamily(arr) {
             type: key,
             nodeList: arr.filter(node => node.tag === key)
         }));
-    //pino.info('EVENT'.blue, events[0].nodeList[0].tree);
     events = events.filter(obj => obj.nodeList.length > 0)
         .map(obj => ({
             id: 'e_' + treeData.eventId++,

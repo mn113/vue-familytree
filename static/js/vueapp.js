@@ -173,13 +173,13 @@ class Family {
 /* UTILITY FUNCTIONS */
 
 function year(date) {
-    if (date === undefined || date.length === 0) return "?";
+    if (!date && date !== 0) return "?";
     if (typeof date === 'number') date = new Date(date);
     return date.getFullYear();
 }
 
 function fulldate(date) {
-    if (date === undefined || date.length === 0) return "?";
+    if (!date && date !== 0) return "?";
     if (typeof date === 'number') date = new Date(date);
     var y = date.getFullYear(),
         m = (date.getMonth() + 1).toString().padStart(2, "0"),

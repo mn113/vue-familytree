@@ -182,17 +182,17 @@ ol, ul, h5 {
 .node.selected ellipse {
     stroke-width: 2.5px;
 }
-.node.selected rect {
-	stroke: #333;
-}
 .node.M.selected rect {
 	stroke: blue;
 }
 .node.F.selected rect {
 	stroke: red;
 }
+.node.unknown.selected rect {
+    stroke: #333;
+}
 .node.selected ellipse {
-    stroke: brown;
+    stroke: goldenrod;
 }
 .node .handles text {
     fill: #999;
