@@ -19,10 +19,11 @@ Vue.component('family', {
     methods: {
         update() {
             // Emit signal back to parent:
-            this.$emit('update', Object.assign({	// retain all data while updating editables
+            var newData = Object.assign({	// retain all data while updating editables
                 married: this.$refs.married.value,
                 events: this.data.events
-            }), this.data);
+            }, this.data);
+            this.$emit('update', newData);
         }
     },
     computed: {

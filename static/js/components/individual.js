@@ -30,12 +30,13 @@ Vue.component('individual', {
     methods: {
         update() {
             // Emit signal back to parent:
-            this.$emit('update', Object.assign({	// retain all data while updating editables
+            var newData = Object.assign({	// retain all data while updating editables
                 fname: this.$refs.fname.value,
                 lname: this.$refs.lname.value,
                 sex: this.$refs.sex.value,
                 events: this.data.events
-            }), this.data);
+            }, this.data);
+            this.$emit('update', newData);
         }
     },
     computed: {

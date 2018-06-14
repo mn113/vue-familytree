@@ -19,7 +19,7 @@ var treeNodeMixin = {  // eslint-disable-line no-unused-vars
                 type: "",
                 date: "",
                 place: "",
-                id: this.$root.eventId++
+                id: 'E_' + this.$root.eventId++
             });
         },
 
@@ -39,6 +39,7 @@ var treeNodeMixin = {  // eslint-disable-line no-unused-vars
             // Find event index in array by id:
             var i = this.data.events.findIndex(e => e.id === id);
             if (i > -1) {
+                console.log("OK", i);
                 this.data.events[i] = value;
                 this.update();
                 this.editing = true;

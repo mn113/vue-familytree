@@ -1,4 +1,4 @@
-/* global fulldate, year, app, moment */
+/* global fulldate, app, moment */
 
 Vue.component('event', {
     props: {
@@ -16,11 +16,12 @@ Vue.component('event', {
         },
         updateEvent() {
             this.$emit('update', {
-                id: this.id,
+                id: this.event.id,
                 type: this.$refs.type.value,
                 date: Date.parse(this.$refs.date.value),
                 place: this.$refs.place.value
             });
+            console.log("Emitted update from", this.event.id);
         }
     },
     computed: {
@@ -29,10 +30,6 @@ Vue.component('event', {
                 console.log("Computed fulldate property");
                 // Proxy for global utility function
                 return fulldate(this.event.date);
-            },
-            set(dateString) {
-                console.log("Parsed", Date.parse(dateString));
-                this.event.date = Date.parse(dateString);   // to milliseconds
             }
         },
 
@@ -85,7 +82,7 @@ Vue.component('event', {
                 vs-label-placeholder="Date"
                 style="width:7em"
                 ref="date"
-                v-model="dateString"
+                :value="dateString"
                 @blur="updateEvent"
                 vs-validation-function="validateDate"/>
 
@@ -99,11 +96,6 @@ Vue.component('event', {
             <datalist :id="event.id">
                 <option v-for="place in placeList" :value="place" />
             </datalist>
-
-            <!--input-suggestions
-                :id="'x'"
-                v-model="event.place">
-            </input-suggestions-->
 
             <vs-button vs-type="danger-border" vs-icon="delete" @click="deleteEvent"></vs-button>
         </div>
