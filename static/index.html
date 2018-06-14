@@ -14,14 +14,21 @@
 </head>
 <body>
 	<div id="app" class="layout-grid">
+        <vs-dialog
+            vs-type="prompt"
+            vs-title="Upload file"
+            @vs-accept="hideUploadDialog"
+            @vs-cancel="hideUploadDialog"
+            :vs-active.sync="uploadDialogIsOpen">
+            <form>
+                <label>Choose a GEDCOM file:
+                    <input type="file" id="file" ref="file" @change="storeFormFile()"/>
+                </label>
+                <vs-button @click="submitForm()">Upload</vs-button>
+            </form>
+        </vs-dialog>
 		<header>
             <topbar></topbar>
-			<!--form>
-				<label>Choose a GEDCOM file:
-					<input type="file" id="file" ref="file" @change="storeFormFile()"/>
-				</label>
-				<vs-button @click="submitForm()">Upload</vs-button>
-		    </form-->
 		</header>
 		<main>
 			<svg id="dagre-svg" width="100%" height="100%"></svg>

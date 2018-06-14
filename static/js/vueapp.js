@@ -17,7 +17,8 @@ var app = new Vue({ // eslint-disable-line no-unused-vars
         fileToUpload: "",
         individualId: 0,
         familyId: 0,
-        eventId: 0
+        eventId: 0,
+        uploadDialogIsOpen: false
     },
     mounted() {
         this.fetchTreeData();
@@ -51,6 +52,7 @@ var app = new Vue({ // eslint-disable-line no-unused-vars
                     this.familyId = response.data.familyId;
                     this.eventId = response.data.eventId;
                     // Now we can graph:
+                    Tree.clearGraph();
                     Tree.addAllNodes();
                     Tree.addAllEdges();
                     Tree.layoutAndRender();
@@ -136,6 +138,14 @@ var app = new Vue({ // eslint-disable-line no-unused-vars
 
         setHomePerson() {
             this.homePerson = this.selectedNode;
+        },
+
+        showUploadDialog() {
+            this.uploadDialogIsOpen = true;
+        },
+
+        hideUploadDialog() {
+            this.uploadDialogIsOpen = false;
         }
     }
 });

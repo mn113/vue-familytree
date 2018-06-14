@@ -29,7 +29,7 @@ Vue.component('topbar', {
                         <vs-button
                             vs-type="dark-border"
                             vs-icon="cloud_upload"
-                            @click="$root.uploadDialog()">
+                            @click="$root.showUploadDialog()">
                             Upload GEDCOM file
                         </vs-button>
                     </vs-dropdown-item>
