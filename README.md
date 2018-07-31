@@ -2,7 +2,7 @@
 
 This project is intended to be a web app allowing you to build or manage a family tree through a visual interface. Inspired by [Gramps](https://gramps-project.org/), but trying to be more intuitive.
 
-![Screenshot](https://raw.githubusercontent.com/mn113/vue-familytree/ScreenShot2018-07-31.png)
+![Screenshot](https://raw.githubusercontent.com/mn113/vue-familytree/master/doc/ScreenShot2018-07-31.png)
 
 ## Demo
 
@@ -29,6 +29,7 @@ Planned features
 - [Vuejs](https://vuejs.org/)
 - [Vuesax](https://github.com/lusaxweb/vuesax) UI framework
 - [Node.js](https://nodejs.org/)
+- [Express](https://github.com/expressjs)
 - [dagre](https://github.com/dagrejs/dagre)
 
 ## Status
