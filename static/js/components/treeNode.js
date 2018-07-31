@@ -11,6 +11,10 @@ var treeNodeMixin = {  // eslint-disable-line no-unused-vars
             this.editing = !this.editing;
         },
 
+        selectify() {
+            this.$root.selectedNode = this;
+        },
+
         // A tree node can have its own Events
         // Common Event methods:
         addEvent() {

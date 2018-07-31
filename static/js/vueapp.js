@@ -39,6 +39,7 @@ var app = new Vue({ // eslint-disable-line no-unused-vars
         }
     },
     methods: {
+        // Data
         fetchTreeData() {
             axios.get('/treedata')
                 .then(response => {
@@ -67,10 +68,12 @@ var app = new Vue({ // eslint-disable-line no-unused-vars
                 });
         },
 
+        // Data
         storeFormFile() {
             this.fileToUpload = this.$refs.file.files[0];
         },
 
+        // Data
         submitForm() {
             var formData = new FormData();
             formData.append('file', this.fileToUpload);
@@ -89,26 +92,31 @@ var app = new Vue({ // eslint-disable-line no-unused-vars
             });
         },
 
+        // Tree
         selectNodeById(id) {
             var matched = this.nodes.filter(n => n.id === id);
             if (matched.length > 0) this.selectedNode = matched[0];
             Tree.centreNode(id);
         },
 
+        // Tree
         selectNone() {
             this.selectedNode = null;
         },
 
+        // Tree
         getFamilyById(id) {
             var matched = this.tree.families.filter(n => n.id === id);
             return (matched.length > 0) ? matched[0] : null;
         },
 
+        // Tree
         getIndividualById(id) {
             var matched = this.tree.individuals.filter(n => n.id === id);
             return (matched.length > 0) ? matched[0] : null;
         },
 
+        // Tree
         newIndividual() {
             var i = new Individual();
             console.log("Created i:", i);
@@ -117,8 +125,10 @@ var app = new Vue({ // eslint-disable-line no-unused-vars
             Tree.layoutAndRender();
             Tree.selectNode(i.id);
             this.notify('Person created.');
+            return i;
         },
 
+        // Tree
         newFamily() {
             var f = new Family();
             console.log("Created f:", f);
@@ -127,8 +137,10 @@ var app = new Vue({ // eslint-disable-line no-unused-vars
             Tree.layoutAndRender();
             Tree.selectNode(f.id);
             this.notify('Family created.');
+            return f;
         },
 
+        // Tree
         newLink(source, target) {
             console.log("Created link:", source, '->', target);
             this.tree.links.push({source, target});
@@ -137,6 +149,7 @@ var app = new Vue({ // eslint-disable-line no-unused-vars
             this.notify('Link created.');
         },
 
+        // Tree
         goHome() {
             console.log("Going Home");
             if (this.homePerson !== null) this.selectedNode = this.homePerson;
@@ -144,19 +157,23 @@ var app = new Vue({ // eslint-disable-line no-unused-vars
             Tree.centreNode(this.selectedNode.id);
         },
 
+        // Tree
         setHomePerson() {
             this.homePerson = this.selectedNode;
             this.notify('Home Person set.');
         },
 
+        // UI
         showUploadDialog() {
             this.uploadDialogIsOpen = true;
         },
 
+        // UI
         hideUploadDialog() {
             this.uploadDialogIsOpen = false;
         },
 
+        // UI
         notify(text, color = 'success') {
             this.$vs.notify({
                 position: 'top-right',

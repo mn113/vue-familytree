@@ -37,6 +37,19 @@ Vue.component('individual', {
                 events: this.data.events
             }, this.data);
             this.$emit('update', newData);
+        },
+
+        // Create 2 nodes and link them above this one:
+        addFamilyAndParent() {
+            var myNode = this.$root.selectedNode;
+            var family = this.$root.newFamily();
+            var famNode = this.$root.getFamilyById(family.id);
+            this.$root.newLink(famNode, myNode);
+            var parent = this.$root.newIndividual();
+            var parNode = this.$root.getIndividualById(parent.id);
+            this.$root.newLink(parNode, famNode);
+            this.selectify();
+            Tree.redraw();
         }
     },
     computed: {
@@ -106,6 +119,14 @@ Vue.component('individual', {
                         :class="{ 'vs-icon-dark-border': !isHomePerson, 'vs-icon-success-filled': isHomePerson }"
                         @click="$root.setHomePerson()">
                         Set as Home person
+                    </vs-button>
+                </vs-dropdown-item>
+                <vs-dropdown-item>
+                    <vs-button
+                        vs-type="dark-border"
+                        vs-icon="group_add"
+                        @click="addFamilyAndParent()">
+                        Add parent
                     </vs-button>
                 </vs-dropdown-item>
                 <vs-dropdown-item>
