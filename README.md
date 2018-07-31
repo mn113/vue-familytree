@@ -2,7 +2,7 @@
 
 This project is intended to be a web app allowing you to build or manage a family tree through a visual interface. Inspired by [Gramps](https://gramps-project.org/), but trying to be more intuitive.
 
-![Screenshot](Screen Shot 2018-07-31.png)
+![Screenshot](https://raw.githubusercontent.com/mn113/vue-familytree/Screen Shot 2018-07-31.png)
 
 ## Demo
 
