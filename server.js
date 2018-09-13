@@ -8,7 +8,7 @@ const multer = require('multer');
 
 const app = express();
 const upload = multer({ dest: 'uploads/' });
-var port = 3000;
+var port = process.env.PORT || 3000;
 var treeData = {};
 // Counters which will also be needed on front-end:
 treeData.individualId = 0;
