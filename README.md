@@ -6,7 +6,7 @@ This project is intended to be a web app allowing you to build or manage a famil
 
 ## Demo
 
-![Link](https://vue-familytree.herokuapp.com/)
+[Link](https://vue-familytree.herokuapp.com/)
 
 ## Features
 
